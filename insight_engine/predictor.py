@@ -80,14 +80,10 @@ def train_model(
     else:
         y = y.fillna(y.median() if pd.api.types.is_numeric_dtype(y) else 0)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        feature_df, y, test_size=test_size, random_state=random_state
-    )
+    X_train, X_test, y_train, y_test = train_test_split(feature_df, y, test_size=test_size, random_state=random_state)
 
     if task_type == "classification":
-        model = GradientBoostingClassifier(
-            n_estimators=100, max_depth=4, random_state=random_state
-        )
+        model = GradientBoostingClassifier(n_estimators=100, max_depth=4, random_state=random_state)
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         metrics = {
@@ -95,9 +91,7 @@ def train_model(
             "f1_weighted": round(f1_score(y_test, preds, average="weighted", zero_division=0), 4),
         }
     else:
-        model = GradientBoostingRegressor(
-            n_estimators=100, max_depth=4, random_state=random_state
-        )
+        model = GradientBoostingRegressor(n_estimators=100, max_depth=4, random_state=random_state)
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         metrics = {
@@ -107,9 +101,7 @@ def train_model(
         }
 
     # Feature importances
-    importances = dict(
-        zip(feature_names, [round(float(v), 4) for v in model.feature_importances_])
-    )
+    importances = dict(zip(feature_names, [round(float(v), 4) for v in model.feature_importances_]))
     importances = dict(sorted(importances.items(), key=lambda x: x[1], reverse=True))
 
     # SHAP values (optional — try import)

@@ -11,12 +11,14 @@ from insight_engine.predictor import PredictionResult, detect_task_type, train_m
 def classification_df():
     np.random.seed(42)
     n = 200
-    return pd.DataFrame({
-        "feature_1": np.random.uniform(0, 10, n),
-        "feature_2": np.random.uniform(0, 10, n),
-        "category": np.random.choice(["A", "B"], n),
-        "target": np.random.choice([0, 1], n),
-    })
+    return pd.DataFrame(
+        {
+            "feature_1": np.random.uniform(0, 10, n),
+            "feature_2": np.random.uniform(0, 10, n),
+            "category": np.random.choice(["A", "B"], n),
+            "target": np.random.choice([0, 1], n),
+        }
+    )
 
 
 @pytest.fixture
@@ -25,12 +27,14 @@ def regression_df():
     n = 200
     x1 = np.random.uniform(0, 10, n)
     x2 = np.random.uniform(0, 10, n)
-    return pd.DataFrame({
-        "feature_1": x1,
-        "feature_2": x2,
-        "noise": np.random.normal(0, 1, n),
-        "target": 3 * x1 + 2 * x2 + np.random.normal(0, 2, n),
-    })
+    return pd.DataFrame(
+        {
+            "feature_1": x1,
+            "feature_2": x2,
+            "noise": np.random.normal(0, 1, n),
+            "target": 3 * x1 + 2 * x2 + np.random.normal(0, 2, n),
+        }
+    )
 
 
 class TestDetectTaskType:
@@ -68,10 +72,12 @@ class TestTrainModel:
         assert "rmse" in result.metrics
 
     def test_string_target(self):
-        df = pd.DataFrame({
-            "x": np.random.uniform(0, 10, 100),
-            "label": np.random.choice(["good", "bad"], 100),
-        })
+        df = pd.DataFrame(
+            {
+                "x": np.random.uniform(0, 10, 100),
+                "label": np.random.choice(["good", "bad"], 100),
+            }
+        )
         result = train_model(df, "label")
         assert result.task_type == "classification"
         assert result.metrics["accuracy"] >= 0
@@ -81,11 +87,13 @@ class TestTrainModel:
             train_model(classification_df, "nonexistent")
 
     def test_handles_missing_values(self):
-        df = pd.DataFrame({
-            "x": [1, 2, None, 4, 5, 6, 7, 8, 9, 10] * 10,
-            "y": [None, "a", "b", "a", "b", "a", "b", "a", "b", "a"] * 10,
-            "target": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1] * 10,
-        })
+        df = pd.DataFrame(
+            {
+                "x": [1, 2, None, 4, 5, 6, 7, 8, 9, 10] * 10,
+                "y": [None, "a", "b", "a", "b", "a", "b", "a", "b", "a"] * 10,
+                "target": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1] * 10,
+            }
+        )
         result = train_model(df, "target")
         assert result.task_type == "classification"
 

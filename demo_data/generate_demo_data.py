@@ -23,30 +23,33 @@ def generate_ecommerce():
     for i in range(1000):
         date = start_date + timedelta(days=random.randint(0, 364))
         category = random.choice(categories)
-        base_price = {"Electronics": 150, "Clothing": 45, "Home & Garden": 75,
-                      "Books": 18, "Sports": 60, "Beauty": 35}[category]
+        base_price = {"Electronics": 150, "Clothing": 45, "Home & Garden": 75, "Books": 18, "Sports": 60, "Beauty": 35}[
+            category
+        ]
         quantity = random.randint(1, 5)
         unit_price = round(base_price * random.uniform(0.5, 2.5), 2)
         discount = round(random.uniform(0, 0.3), 2) if random.random() > 0.6 else 0
         revenue = round(unit_price * quantity * (1 - discount), 2)
         returned = 1 if random.random() < 0.08 else 0
 
-        rows.append({
-            "order_id": f"ORD-{10000 + i}",
-            "date": date.strftime("%Y-%m-%d"),
-            "customer_id": f"CUST-{random.randint(1, 300)}",
-            "category": category,
-            "product_name": f"{category} Item {random.randint(1, 50)}",
-            "quantity": quantity,
-            "unit_price": unit_price,
-            "discount_pct": discount,
-            "revenue": revenue,
-            "region": random.choice(regions),
-            "channel": random.choice(channels),
-            "payment_method": random.choice(payment_methods),
-            "returned": returned,
-            "customer_rating": round(random.uniform(1, 5), 1) if random.random() > 0.3 else None,
-        })
+        rows.append(
+            {
+                "order_id": f"ORD-{10000 + i}",
+                "date": date.strftime("%Y-%m-%d"),
+                "customer_id": f"CUST-{random.randint(1, 300)}",
+                "category": category,
+                "product_name": f"{category} Item {random.randint(1, 50)}",
+                "quantity": quantity,
+                "unit_price": unit_price,
+                "discount_pct": discount,
+                "revenue": revenue,
+                "region": random.choice(regions),
+                "channel": random.choice(channels),
+                "payment_method": random.choice(payment_methods),
+                "returned": returned,
+                "customer_rating": round(random.uniform(1, 5), 1) if random.random() > 0.3 else None,
+            }
+        )
 
     path = os.path.join(DEMO_DIR, "ecommerce.csv")
     with open(path, "w", newline="") as f:
@@ -69,14 +72,16 @@ def generate_marketing_touchpoints():
 
         for j in range(n_touches):
             touch_date = base_date + timedelta(days=random.randint(0, 30) * j)
-            rows.append({
-                "user_id": f"U{user_id:04d}",
-                "channel": random.choice(channels),
-                "timestamp": touch_date.strftime("%Y-%m-%d %H:%M:%S"),
-                "campaign": f"Campaign_{random.choice(['Spring', 'Summer', 'Fall', 'Winter'])}_{random.randint(1, 5)}",
-                "spend": round(random.uniform(0.5, 25.0), 2),
-                "converted": 1 if converted and j == n_touches - 1 else 0,
-            })
+            rows.append(
+                {
+                    "user_id": f"U{user_id:04d}",
+                    "channel": random.choice(channels),
+                    "timestamp": touch_date.strftime("%Y-%m-%d %H:%M:%S"),
+                    "campaign": f"Campaign_{random.choice(['Spring', 'Summer', 'Fall', 'Winter'])}_{random.randint(1, 5)}",
+                    "spend": round(random.uniform(0.5, 25.0), 2),
+                    "converted": 1 if converted and j == n_touches - 1 else 0,
+                }
+            )
 
     path = os.path.join(DEMO_DIR, "marketing_touchpoints.csv")
     with open(path, "w", newline="") as f:
@@ -96,11 +101,19 @@ def generate_hr_attrition():
     for i in range(500):
         dept = random.choice(departments)
         years = random.randint(0, 25)
-        salary = round(random.gauss(
-            {"Engineering": 95000, "Sales": 70000, "Marketing": 65000,
-             "HR": 60000, "Finance": 80000, "Operations": 55000}[dept],
-            15000
-        ))
+        salary = round(
+            random.gauss(
+                {
+                    "Engineering": 95000,
+                    "Sales": 70000,
+                    "Marketing": 65000,
+                    "HR": 60000,
+                    "Finance": 80000,
+                    "Operations": 55000,
+                }[dept],
+                15000,
+            )
+        )
         performance = random.choice(performance_ratings)
         satisfaction = round(random.uniform(1, 5), 1)
         overtime = 1 if random.random() < 0.3 else 0
@@ -118,20 +131,22 @@ def generate_hr_attrition():
 
         attrited = 1 if random.random() < attrition_prob else 0
 
-        rows.append({
-            "employee_id": f"EMP-{1000 + i}",
-            "department": dept,
-            "education": random.choice(education_levels),
-            "years_at_company": years,
-            "monthly_salary": salary,
-            "performance_rating": performance,
-            "job_satisfaction": satisfaction,
-            "overtime": overtime,
-            "distance_from_home_miles": random.randint(1, 50),
-            "num_companies_worked": random.randint(0, 8),
-            "training_hours_last_year": random.randint(0, 100),
-            "attrition": attrited,
-        })
+        rows.append(
+            {
+                "employee_id": f"EMP-{1000 + i}",
+                "department": dept,
+                "education": random.choice(education_levels),
+                "years_at_company": years,
+                "monthly_salary": salary,
+                "performance_rating": performance,
+                "job_satisfaction": satisfaction,
+                "overtime": overtime,
+                "distance_from_home_miles": random.randint(1, 50),
+                "num_companies_worked": random.randint(0, 8),
+                "training_hours_last_year": random.randint(0, 100),
+                "attrition": attrited,
+            }
+        )
 
     path = os.path.join(DEMO_DIR, "hr_attrition.csv")
     with open(path, "w", newline="") as f:

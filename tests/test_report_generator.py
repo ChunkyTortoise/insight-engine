@@ -14,12 +14,14 @@ from insight_engine.report_generator import (
 
 @pytest.fixture
 def sample_profile():
-    df = pd.DataFrame({
-        "revenue": np.random.uniform(100, 10000, 100).round(2),
-        "quantity": np.random.randint(1, 50, 100),
-        "category": np.random.choice(["A", "B", "C"], 100),
-        "notes": [None] * 30 + ["note"] * 70,
-    })
+    df = pd.DataFrame(
+        {
+            "revenue": np.random.uniform(100, 10000, 100).round(2),
+            "quantity": np.random.randint(1, 50, 100),
+            "category": np.random.choice(["A", "B", "C"], 100),
+            "notes": [None] * 30 + ["note"] * 70,
+        }
+    )
     return profile_dataframe(df)
 
 

@@ -26,10 +26,17 @@ def remove_duplicates(
         to_drop = set()
         str_cols = [c for c in subset if df[c].dtype == "object"]
         if str_cols:
-            normalized = df[str_cols].fillna("").apply(
-                lambda col: col.str.lower().str.strip()
-                .str.replace(r"[^a-z0-9\s]", "", regex=True)
-                .str.replace(r"\s+", " ", regex=True)
+            normalized = (
+                df[str_cols]
+                .fillna("")
+                .apply(
+                    lambda col: (
+                        col.str.lower()
+                        .str.strip()
+                        .str.replace(r"[^a-z0-9\s]", "", regex=True)
+                        .str.replace(r"\s+", " ", regex=True)
+                    )
+                )
             )
             for i in range(len(normalized)):
                 if i in to_drop:
@@ -37,9 +44,7 @@ def remove_duplicates(
                 for j in range(i + 1, len(normalized)):
                     if j in to_drop:
                         continue
-                    matches = sum(
-                        1 for c in str_cols if normalized.iloc[i][c] == normalized.iloc[j][c]
-                    )
+                    matches = sum(1 for c in str_cols if normalized.iloc[i][c] == normalized.iloc[j][c])
                     if matches / len(str_cols) >= threshold:
                         to_drop.add(j)
 
@@ -74,9 +79,7 @@ def standardize_columns(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     return result, standardized
 
 
-def impute_missing(
-    df: pd.DataFrame, strategy: str = "smart"
-) -> tuple[pd.DataFrame, int]:
+def impute_missing(df: pd.DataFrame, strategy: str = "smart") -> tuple[pd.DataFrame, int]:
     """Impute missing values.
 
     Strategies:

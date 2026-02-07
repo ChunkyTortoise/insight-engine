@@ -44,8 +44,14 @@ def _profile_to_markdown(profile: DataProfile) -> str:
     # Numeric summary
     numeric_cols = [c for c in profile.columns if c.mean is not None]
     if numeric_cols:
-        lines.extend(["", "### Numeric Summary", "| Column | Mean | Median | Std | Min | Max | Skewness |",
-                       "|--------|------|--------|-----|-----|-----|----------|"])
+        lines.extend(
+            [
+                "",
+                "### Numeric Summary",
+                "| Column | Mean | Median | Std | Min | Max | Skewness |",
+                "|--------|------|--------|-----|-----|-----|----------|",
+            ]
+        )
         for col in numeric_cols:
             lines.append(
                 f"| {col.name} | {col.mean} | {col.median} | {col.std} | "
@@ -80,33 +86,22 @@ def generate_report(
     findings = []
     high_null_cols = [c for c in profile.columns if c.null_pct > 20]
     if high_null_cols:
-        findings.append(
-            f"**High missing values**: {', '.join(c.name for c in high_null_cols)} "
-            f"(>{20}% null)"
-        )
+        findings.append(f"**High missing values**: {', '.join(c.name for c in high_null_cols)} (>{20}% null)")
 
     high_outlier_cols = [c for c in profile.columns if c.outlier_count > 0]
     if high_outlier_cols:
         total_outliers = sum(c.outlier_count for c in high_outlier_cols)
-        findings.append(
-            f"**Outliers detected**: {total_outliers} outliers across "
-            f"{len(high_outlier_cols)} columns"
-        )
+        findings.append(f"**Outliers detected**: {total_outliers} outliers across {len(high_outlier_cols)} columns")
 
     if profile.duplicate_rows > 0:
         findings.append(f"**Duplicate rows**: {profile.duplicate_rows:,} duplicate rows found")
 
     skewed_cols = [c for c in profile.columns if c.skewness is not None and abs(c.skewness) > 1]
     if skewed_cols:
-        findings.append(
-            f"**Skewed distributions**: {', '.join(c.name for c in skewed_cols)} "
-            f"(|skewness| > 1)"
-        )
+        findings.append(f"**Skewed distributions**: {', '.join(c.name for c in skewed_cols)} (|skewness| > 1)")
 
     if findings:
-        report.sections.append(
-            ReportSection(title="Key Findings", content="\n".join(f"- {f}" for f in findings))
-        )
+        report.sections.append(ReportSection(title="Key Findings", content="\n".join(f"- {f}" for f in findings)))
 
     # Charts
     if charts:

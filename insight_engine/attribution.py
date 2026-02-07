@@ -44,9 +44,7 @@ def first_touch(touchpoints: pd.DataFrame, conversions: set[str]) -> Attribution
     # Normalize to percentages
     credit_pct = {k: round(v / max(total, 1) * 100, 2) for k, v in credits.items()}
 
-    summary = pd.DataFrame(
-        [{"channel": k, "conversions": v, "credit_pct": credit_pct[k]} for k, v in credits.items()]
-    )
+    summary = pd.DataFrame([{"channel": k, "conversions": v, "credit_pct": credit_pct[k]} for k, v in credits.items()])
 
     return AttributionResult(
         model=AttributionModel.FIRST_TOUCH,
@@ -67,9 +65,7 @@ def last_touch(touchpoints: pd.DataFrame, conversions: set[str]) -> AttributionR
 
     credit_pct = {k: round(v / max(total, 1) * 100, 2) for k, v in credits.items()}
 
-    summary = pd.DataFrame(
-        [{"channel": k, "conversions": v, "credit_pct": credit_pct[k]} for k, v in credits.items()]
-    )
+    summary = pd.DataFrame([{"channel": k, "conversions": v, "credit_pct": credit_pct[k]} for k, v in credits.items()])
 
     return AttributionResult(
         model=AttributionModel.LAST_TOUCH,
@@ -108,9 +104,7 @@ def linear(touchpoints: pd.DataFrame, conversions: set[str]) -> AttributionResul
     )
 
 
-def time_decay(
-    touchpoints: pd.DataFrame, conversions: set[str], half_life_days: float = 7.0
-) -> AttributionResult:
+def time_decay(touchpoints: pd.DataFrame, conversions: set[str], half_life_days: float = 7.0) -> AttributionResult:
     """Credit decays exponentially — recent touchpoints get more credit."""
     _validate_touchpoints(touchpoints)
     converted_tp = touchpoints[touchpoints["user_id"].isin(conversions)].copy()
@@ -151,9 +145,7 @@ def time_decay(
     )
 
 
-def run_all_models(
-    touchpoints: pd.DataFrame, conversions: set[str]
-) -> dict[AttributionModel, AttributionResult]:
+def run_all_models(touchpoints: pd.DataFrame, conversions: set[str]) -> dict[AttributionModel, AttributionResult]:
     """Run all four attribution models and return results."""
     return {
         AttributionModel.FIRST_TOUCH: first_touch(touchpoints, conversions),

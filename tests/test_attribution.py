@@ -15,15 +15,23 @@ from insight_engine.attribution import (
 
 @pytest.fixture
 def touchpoints():
-    return pd.DataFrame({
-        "user_id": ["U1", "U1", "U1", "U2", "U2", "U3", "U3", "U3", "U3"],
-        "channel": ["Google", "Email", "Facebook", "Google", "Google", "LinkedIn", "Email", "Google", "Facebook"],
-        "timestamp": [
-            "2024-01-01 10:00", "2024-01-05 10:00", "2024-01-10 10:00",
-            "2024-01-01 10:00", "2024-01-03 10:00",
-            "2024-01-01 10:00", "2024-01-07 10:00", "2024-01-14 10:00", "2024-01-20 10:00",
-        ],
-    })
+    return pd.DataFrame(
+        {
+            "user_id": ["U1", "U1", "U1", "U2", "U2", "U3", "U3", "U3", "U3"],
+            "channel": ["Google", "Email", "Facebook", "Google", "Google", "LinkedIn", "Email", "Google", "Facebook"],
+            "timestamp": [
+                "2024-01-01 10:00",
+                "2024-01-05 10:00",
+                "2024-01-10 10:00",
+                "2024-01-01 10:00",
+                "2024-01-03 10:00",
+                "2024-01-01 10:00",
+                "2024-01-07 10:00",
+                "2024-01-14 10:00",
+                "2024-01-20 10:00",
+            ],
+        }
+    )
 
 
 @pytest.fixture
@@ -61,11 +69,13 @@ class TestLinear:
         assert len(result.channel_credits) > 0
 
     def test_single_touch(self):
-        tp = pd.DataFrame({
-            "user_id": ["U1"],
-            "channel": ["Google"],
-            "timestamp": ["2024-01-01 10:00"],
-        })
+        tp = pd.DataFrame(
+            {
+                "user_id": ["U1"],
+                "channel": ["Google"],
+                "timestamp": ["2024-01-01 10:00"],
+            }
+        )
         result = linear(tp, {"U1"})
         assert result.channel_credits["Google"] == 100.0
 
@@ -77,11 +87,13 @@ class TestTimeDecay:
         assert result.total_conversions == 2
 
     def test_recent_touch_gets_more_credit(self):
-        tp = pd.DataFrame({
-            "user_id": ["U1", "U1"],
-            "channel": ["Old Channel", "New Channel"],
-            "timestamp": ["2024-01-01 10:00", "2024-01-30 10:00"],
-        })
+        tp = pd.DataFrame(
+            {
+                "user_id": ["U1", "U1"],
+                "channel": ["Old Channel", "New Channel"],
+                "timestamp": ["2024-01-01 10:00", "2024-01-30 10:00"],
+            }
+        )
         result = time_decay(tp, {"U1"}, half_life_days=7.0)
         # New Channel should get more credit due to recency
         assert result.channel_credits.get("New Channel", 0) > result.channel_credits.get("Old Channel", 0)

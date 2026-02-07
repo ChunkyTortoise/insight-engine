@@ -16,13 +16,15 @@ from insight_engine.profiler import profile_dataframe
 @pytest.fixture
 def sample_df():
     np.random.seed(42)
-    return pd.DataFrame({
-        "category": np.random.choice(["A", "B", "C", "D"], 200),
-        "revenue": np.random.uniform(100, 10000, 200).round(2),
-        "quantity": np.random.randint(1, 50, 200),
-        "date": pd.date_range("2024-01-01", periods=200, freq="D"),
-        "is_returned": np.random.choice([True, False], 200),
-    })
+    return pd.DataFrame(
+        {
+            "category": np.random.choice(["A", "B", "C", "D"], 200),
+            "revenue": np.random.uniform(100, 10000, 200).round(2),
+            "quantity": np.random.randint(1, 50, 200),
+            "date": pd.date_range("2024-01-01", periods=200, freq="D"),
+            "is_returned": np.random.choice([True, False], 200),
+        }
+    )
 
 
 class TestGenerateDistributionChart:

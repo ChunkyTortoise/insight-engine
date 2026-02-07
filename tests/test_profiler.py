@@ -14,15 +14,17 @@ from insight_engine.profiler import (
 
 @pytest.fixture
 def sample_df():
-    return pd.DataFrame({
-        "id": range(100),
-        "name": [f"Item {i}" for i in range(100)],
-        "category": np.random.choice(["A", "B", "C"], 100),
-        "price": np.random.uniform(10, 100, 100).round(2),
-        "quantity": np.random.randint(1, 50, 100),
-        "rating": np.random.choice([1, 2, 3, 4, 5], 100),
-        "date": pd.date_range("2024-01-01", periods=100, freq="D"),
-    })
+    return pd.DataFrame(
+        {
+            "id": range(100),
+            "name": [f"Item {i}" for i in range(100)],
+            "category": np.random.choice(["A", "B", "C"], 100),
+            "price": np.random.uniform(10, 100, 100).round(2),
+            "quantity": np.random.randint(1, 50, 100),
+            "rating": np.random.choice([1, 2, 3, 4, 5], 100),
+            "date": pd.date_range("2024-01-01", periods=100, freq="D"),
+        }
+    )
 
 
 class TestDetectColumnType:

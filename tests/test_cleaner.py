@@ -13,12 +13,14 @@ from insight_engine.cleaner import (
 
 @pytest.fixture
 def messy_df():
-    return pd.DataFrame({
-        "First Name": ["  Alice  ", "Bob", "Charlie", "Alice", "Bob", None],
-        "Last-Name": ["Smith", "Jones", "Brown", "Smith", "Jones", "Wilson"],
-        "Age": [25, 30, None, 25, 30, 45],
-        "Salary": [50000, 60000, 70000, 50000, 60000, None],
-    })
+    return pd.DataFrame(
+        {
+            "First Name": ["  Alice  ", "Bob", "Charlie", "Alice", "Bob", None],
+            "Last-Name": ["Smith", "Jones", "Brown", "Smith", "Jones", "Wilson"],
+            "Age": [25, 30, None, 25, 30, 45],
+            "Salary": [50000, 60000, 70000, 50000, 60000, None],
+        }
+    )
 
 
 class TestRemoveDuplicates:
@@ -39,9 +41,11 @@ class TestRemoveDuplicates:
         assert len(cleaned) == 3
 
     def test_fuzzy_dedup(self):
-        df = pd.DataFrame({
-            "name": ["John Smith", "john  smith", "Jane Doe"],
-        })
+        df = pd.DataFrame(
+            {
+                "name": ["John Smith", "john  smith", "Jane Doe"],
+            }
+        )
         cleaned, count = remove_duplicates(df, subset=["name"], fuzzy=True)
         assert count == 1
         assert len(cleaned) == 2
@@ -92,9 +96,7 @@ class TestCleanDataframe:
         assert len(report.operations) > 0
 
     def test_skip_all(self, messy_df):
-        cleaned, report = clean_dataframe(
-            messy_df, dedup=False, standardize=False, impute=False
-        )
+        cleaned, report = clean_dataframe(messy_df, dedup=False, standardize=False, impute=False)
         assert len(cleaned) == len(messy_df)
 
     def test_report_fields(self, messy_df):

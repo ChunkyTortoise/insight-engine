@@ -80,13 +80,19 @@ def main():
         col4.metric("Memory", f"{profile.memory_usage_mb:.1f} MB")
 
         st.dataframe(
-            pd.DataFrame([
-                {
-                    "Column": c.name, "Type": c.dtype, "Non-Null": c.non_null_count,
-                    "Null%": c.null_pct, "Unique": c.unique_count, "Outliers": c.outlier_count,
-                }
-                for c in profile.columns
-            ]),
+            pd.DataFrame(
+                [
+                    {
+                        "Column": c.name,
+                        "Type": c.dtype,
+                        "Non-Null": c.non_null_count,
+                        "Null%": c.null_pct,
+                        "Unique": c.unique_count,
+                        "Outliers": c.outlier_count,
+                    }
+                    for c in profile.columns
+                ]
+            ),
             use_container_width=True,
         )
 
@@ -109,8 +115,11 @@ def main():
 
         if st.button("Clean Data"):
             cleaned, report = clean_dataframe(
-                df, dedup=do_dedup, standardize=do_standardize,
-                impute=do_impute, impute_strategy=strategy,
+                df,
+                dedup=do_dedup,
+                standardize=do_standardize,
+                impute=do_impute,
+                impute_strategy=strategy,
             )
             st.success(f"Cleaning complete: {report.original_rows} → {report.cleaned_rows} rows")
             for op in report.operations:
@@ -146,8 +155,7 @@ def main():
                     st.write(f"**{model.value}** ({result.total_conversions} conversions)")
                     st.dataframe(result.summary, use_container_width=True)
         else:
-            st.info(f"Attribution requires columns: {required_cols}. "
-                    f"Try the Marketing Touchpoints demo dataset.")
+            st.info(f"Attribution requires columns: {required_cols}. Try the Marketing Touchpoints demo dataset.")
 
     # Report tab
     with tab_report:
