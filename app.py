@@ -1,12 +1,11 @@
 """Insight Engine: Upload CSV/Excel, get instant dashboards, predictive models, and reports."""
 
-import io
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
-from insight_engine.attribution import AttributionModel, run_all_models
+from insight_engine.attribution import run_all_models
 from insight_engine.cleaner import clean_dataframe
 from insight_engine.dashboard_generator import generate_dashboard
 from insight_engine.predictor import train_model
