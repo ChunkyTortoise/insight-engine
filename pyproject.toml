@@ -1,0 +1,16 @@
+[project]
+name = "insight-engine"
+version = "0.1.0"
+description = "Upload CSV/Excel, get instant dashboards, predictive models, and PDF reports"
+requires-python = ">=3.11"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,501 @@
+employee_id,department,education,years_at_company,monthly_salary,performance_rating,job_satisfaction,overtime,distance_from_home_miles,num_companies_worked,training_hours_last_year,attrition
+EMP-1000,Marketing,Bachelor's,23,77622,5,2.8,0,35,3,14,0
+EMP-1001,Finance,Bachelor's,5,56954,5,3.7,0,37,7,94,1
+EMP-1002,Engineering,PhD,15,99436,4,2.6,0,45,0,51,0
+EMP-1003,HR,High School,7,40506,4,3.1,0,24,0,48,0
+EMP-1004,Finance,High School,4,104806,2,1.9,0,26,5,1,0
+EMP-1005,Marketing,Bachelor's,17,79534,4,4.7,0,47,1,66,0
+EMP-1006,Operations,High School,24,60380,5,1.6,0,36,8,98,0
+EMP-1007,Operations,High School,8,52754,2,2.7,0,11,2,4,0
+EMP-1008,Marketing,Master's,25,84987,2,3.6,0,33,4,82,0
+EMP-1009,Sales,High School,9,74324,5,2.4,0,42,1,36,0
+EMP-1010,Marketing,Bachelor's,14,52460,1,3.8,0,16,8,51,0
+EMP-1011,HR,High School,12,47291,4,1.8,0,40,7,35,0
+EMP-1012,HR,Bachelor's,24,78262,4,3.0,0,40,6,64,0
+EMP-1013,HR,Bachelor's,22,69742,2,4.3,1,32,0,82,0
+EMP-1014,Finance,Master's,10,79774,2,3.7,0,2,5,96,0
+EMP-1015,HR,High School,12,59507,5,2.3,0,11,4,69,1
+EMP-1016,Sales,PhD,24,69350,3,2.0,0,13,2,45,0
+EMP-1017,Finance,Master's,9,50661,2,3.6,0,26,3,24,0
+EMP-1018,Finance,Bachelor's,18,92538,2,2.0,0,35,5,92,0
+EMP-1019,HR,Bachelor's,5,54531,3,2.6,0,45,3,43,0
+EMP-1020,Finance,PhD,19,82852,2,4.4,0,24,5,3,0
+EMP-1021,Operations,Master's,15,40864,5,2.1,0,2,5,96,0
+EMP-1022,HR,High School,24,48095,2,1.0,0,8,7,76,0
+EMP-1023,HR,Bachelor's,5,34657,1,1.8,0,18,0,11,1
+EMP-1024,Marketing,High School,6,59918,3,2.8,0,14,2,46,0
+EMP-1025,Finance,Bachelor's,6,83966,4,2.9,0,28,7,40,0
+EMP-1026,Engineering,High School,0,106416,2,3.8,0,3,5,22,1
+EMP-1027,HR,PhD,12,57054,5,3.1,0,36,0,77,0
+EMP-1028,Operations,Master's,4,55085,3,1.5,0,26,2,17,0
+EMP-1029,Marketing,PhD,17,63259,4,2.7,0,49,7,68,0
+EMP-1030,HR,Master's,8,57266,4,3.8,0,35,5,93,0
+EMP-1031,Finance,Master's,13,88664,3,4.2,0,12,8,16,0
+EMP-1032,Marketing,High School,19,98239,4,4.9,1,3,0,19,0
+EMP-1033,Marketing,Bachelor's,11,44048,2,3.3,0,9,1,41,1
+EMP-1034,Marketing,Bachelor's,2,68435,4,1.1,1,44,1,36,0
+EMP-1035,Marketing,PhD,9,77822,5,3.1,0,10,7,88,0
+EMP-1036,Sales,High School,13,49724,4,3.9,1,9,5,65,0
+EMP-1037,Operations,High School,22,61729,2,4.7,1,34,3,22,0
+EMP-1038,Operations,Bachelor's,17,57518,2,1.8,1,42,0,80,1
+EMP-1039,Marketing,Bachelor's,19,58366,1,1.2,0,27,4,62,0
+EMP-1040,Sales,High School,6,66612,1,3.1,0,43,7,22,0
+EMP-1041,Sales,Master's,11,53615,4,2.9,1,31,2,48,0
+EMP-1042,Sales,PhD,18,82440,5,1.4,0,25,8,30,0
+EMP-1043,Operations,High School,3,50267,4,1.2,0,42,7,22,0
+EMP-1044,Engineering,High School,14,91182,2,4.7,0,21,2,22,0
+EMP-1045,Sales,Bachelor's,18,60786,5,4.6,1,7,6,41,0
+EMP-1046,Operations,Master's,18,66347,5,3.2,1,45,3,73,0
+EMP-1047,Finance,PhD,6,85814,3,3.2,0,47,7,94,0
+EMP-1048,Operations,Master's,15,60299,3,2.0,1,37,7,78,1
+EMP-1049,Operations,PhD,23,81741,1,1.7,0,1,2,73,0
+EMP-1050,Sales,PhD,14,74586,2,3.7,0,47,1,27,0
+EMP-1051,HR,Bachelor's,22,62154,3,1.6,0,9,2,3,0
+EMP-1052,Operations,Bachelor's,24,62946,3,2.6,0,12,0,5,0
+EMP-1053,Marketing,PhD,24,63592,5,3.0,0,34,8,64,0
+EMP-1054,Finance,PhD,14,73973,3,3.7,0,4,0,25,0
+EMP-1055,Engineering,Master's,8,103371,3,1.9,0,8,7,8,1
+EMP-1056,Marketing,Bachelor's,5,94159,5,4.6,0,42,2,99,1
+EMP-1057,Operations,Master's,18,46348,3,3.7,1,42,8,24,1
+EMP-1058,Engineering,PhD,19,109677,5,2.7,0,6,1,18,0
+EMP-1059,HR,PhD,1,30394,2,3.9,1,27,7,96,1
+EMP-1060,Operations,Bachelor's,4,74322,1,1.5,0,3,1,79,1
+EMP-1061,Operations,PhD,1,61752,4,1.5,0,16,3,79,0
+EMP-1062,Operations,Bachelor's,23,57798,2,2.7,0,30,4,99,0
+EMP-1063,Finance,Master's,3,92190,2,4.1,1,2,8,87,1
+EMP-1064,HR,Master's,20,26535,1,3.3,0,25,2,2,1
+EMP-1065,Finance,High School,6,74739,3,5.0,0,48,0,27,0
+EMP-1066,Operations,PhD,21,42468,5,3.0,1,8,2,35,1
+EMP-1067,Sales,Bachelor's,13,64211,3,3.2,0,14,0,33,0
+EMP-1068,Engineering,Bachelor's,23,95609,4,4.7,0,31,3,71,0
+EMP-1069,HR,High School,8,56636,1,1.7,0,28,6,75,0
+EMP-1070,Engineering,Master's,13,96065,3,3.1,0,17,2,87,0
+EMP-1071,Operations,Bachelor's,20,62728,1,1.9,0,4,1,2,0
+EMP-1072,Finance,PhD,11,92812,4,3.3,0,20,1,47,0
+EMP-1073,HR,Bachelor's,18,51639,3,2.5,0,17,7,13,0
+EMP-1074,Sales,High School,25,69889,1,1.2,1,3,3,3,1
+EMP-1075,Operations,High School,25,71008,4,3.2,1,32,2,54,0
+EMP-1076,Finance,High School,1,62606,3,2.8,1,22,0,59,1
+EMP-1077,Engineering,PhD,6,90021,5,1.2,0,46,3,42,1
+EMP-1078,Engineering,PhD,1,99764,5,4.8,0,12,1,90,0
+EMP-1079,Sales,Master's,0,58599,1,3.3,1,29,6,90,0
+EMP-1080,HR,Bachelor's,19,59913,1,3.2,0,39,6,20,0
+EMP-1081,HR,Master's,8,63681,4,4.6,0,38,1,67,0
+EMP-1082,Sales,High School,4,64685,1,1.2,1,20,5,80,0
+EMP-1083,Finance,PhD,0,63822,1,4.2,1,8,4,4,0
+EMP-1084,Engineering,Master's,23,83820,5,4.1,0,37,0,40,0
+EMP-1085,Sales,High School,21,53526,1,2.3,1,38,4,82,1
+EMP-1086,Finance,High School,15,93577,5,3.1,0,13,7,75,0
+EMP-1087,HR,Master's,21,53534,1,4.3,0,7,6,48,0
+EMP-1088,Engineering,Bachelor's,4,97592,1,2.9,0,49,5,55,0
+EMP-1089,Sales,High School,6,82053,5,3.7,0,40,7,1,0
+EMP-1090,Engineering,Bachelor's,22,100171,4,4.4,0,30,0,65,0
+EMP-1091,HR,High School,17,49452,2,1.4,0,41,4,12,0
+EMP-1092,Finance,PhD,25,92458,5,3.3,0,10,1,10,0
+EMP-1093,HR,High School,0,67230,5,3.0,0,5,8,51,0
+EMP-1094,Marketing,Bachelor's,9,56336,1,2.8,0,37,7,64,0
+EMP-1095,Marketing,High School,14,63057,1,3.2,1,27,7,40,1
+EMP-1096,HR,High School,21,83989,2,2.5,1,49,1,20,0
+EMP-1097,Finance,Bachelor's,15,96017,5,2.1,1,30,6,74,0
+EMP-1098,Operations,High School,15,52543,1,3.4,1,38,6,14,1
+EMP-1099,Marketing,PhD,13,60870,1,3.0,0,19,8,71,0
+EMP-1100,Sales,PhD,10,67621,4,3.3,0,12,4,81,0
+EMP-1101,Engineering,PhD,19,81180,4,3.8,1,35,3,92,0
+EMP-1102,Marketing,Master's,19,54356,5,2.2,1,7,6,18,1
+EMP-1103,Sales,Bachelor's,11,75065,5,4.0,0,1,8,73,0
+EMP-1104,Sales,Master's,8,51933,5,1.9,1,26,7,19,0
+EMP-1105,Finance,High School,14,76007,5,3.3,0,6,4,9,0
+EMP-1106,Sales,Bachelor's,3,48414,2,2.4,0,14,6,13,0
+EMP-1107,Sales,Bachelor's,6,56958,4,3.9,0,3,4,41,0
+EMP-1108,Finance,Master's,16,91182,1,4.6,0,32,2,33,0
+EMP-1109,Engineering,Master's,19,102538,1,2.7,0,18,0,100,0
+EMP-1110,Finance,Bachelor's,13,75575,4,4.6,0,45,4,76,0
+EMP-1111,Finance,High School,18,83128,5,3.5,0,26,7,70,0
+EMP-1112,Sales,Master's,3,67815,4,3.1,0,40,2,50,0
+EMP-1113,Operations,Bachelor's,12,71076,3,3.2,0,45,6,89,0
+EMP-1114,Finance,Master's,17,47782,4,3.3,0,22,4,40,0
+EMP-1115,Operations,Bachelor's,1,67675,1,1.5,1,4,7,46,0
+EMP-1116,Sales,High School,22,98361,1,2.4,1,15,8,96,1
+EMP-1117,Finance,Bachelor's,25,66381,4,1.8,0,7,8,74,0
+EMP-1118,Marketing,Master's,10,61465,4,1.0,1,9,4,67,0
+EMP-1119,Finance,Master's,8,83653,2,1.2,0,48,8,78,0
+EMP-1120,HR,Master's,13,55196,4,2.0,1,21,6,46,0
+EMP-1121,HR,Master's,24,60075,4,2.4,0,50,5,28,0
+EMP-1122,Sales,PhD,25,49471,4,1.5,0,25,2,81,1
+EMP-1123,Sales,Master's,24,69171,4,2.3,1,39,5,29,1
+EMP-1124,Engineering,Bachelor's,0,87352,2,4.4,1,49,7,54,1
+EMP-1125,HR,High School,22,38842,4,2.2,1,25,0,13,1
+EMP-1126,Engineering,Master's,5,86701,1,2.5,0,35,8,81,0
+EMP-1127,HR,PhD,1,102166,1,4.0,0,38,8,50,1
+EMP-1128,HR,Master's,22,40822,2,4.5,1,29,0,34,0
+EMP-1129,HR,PhD,4,60659,4,4.2,0,5,2,93,0
+EMP-1130,Engineering,PhD,5,112372,2,3.9,0,23,6,96,0
+EMP-1131,Finance,Master's,1,86066,4,3.2,0,17,8,22,0
+EMP-1132,Marketing,Master's,4,78679,2,3.0,0,4,0,86,0
+EMP-1133,HR,Bachelor's,8,73408,3,3.6,1,13,1,14,0
+EMP-1134,Sales,PhD,6,83423,4,2.1,0,44,1,57,0
+EMP-1135,HR,Bachelor's,24,79530,4,4.1,1,32,2,3,0
+EMP-1136,Sales,High School,17,47875,1,4.6,0,5,6,31,1
+EMP-1137,Engineering,Bachelor's,8,89483,3,3.9,1,21,8,64,0
+EMP-1138,Sales,High School,8,62300,2,4.5,1,33,1,91,0
+EMP-1139,HR,PhD,14,52384,4,3.0,0,23,2,35,0
+EMP-1140,Marketing,Master's,8,97426,3,2.0,1,45,1,60,0
+EMP-1141,Finance,Master's,19,61313,2,2.8,0,16,1,18,0
+EMP-1142,Finance,PhD,14,97425,3,4.5,0,38,8,65,0
+EMP-1143,Sales,Bachelor's,24,65566,5,1.2,0,31,1,35,0
+EMP-1144,HR,PhD,21,69472,1,4.2,0,46,4,22,0
+EMP-1145,Marketing,Bachelor's,4,76095,2,4.3,0,34,3,30,0
+EMP-1146,Finance,Bachelor's,25,112613,5,3.0,0,12,8,65,0
+EMP-1147,Engineering,High School,22,119713,5,3.2,1,8,0,23,1
+EMP-1148,Sales,High School,5,72083,5,2.5,0,33,8,86,0
+EMP-1149,HR,Bachelor's,22,58254,4,1.5,0,24,6,11,0
+EMP-1150,Marketing,High School,1,74534,5,2.2,0,38,8,96,1
+EMP-1151,Engineering,Bachelor's,25,89543,4,2.1,0,13,5,39,0
+EMP-1152,HR,High School,18,50872,1,1.1,1,30,6,23,0
+EMP-1153,Engineering,PhD,11,115597,3,4.8,0,5,5,2,0
+EMP-1154,Operations,PhD,1,18014,4,2.7,1,24,4,11,1
+EMP-1155,Operations,Master's,2,70754,2,4.9,1,7,6,78,0
+EMP-1156,Finance,Bachelor's,8,82372,5,3.5,0,28,6,70,0
+EMP-1157,Sales,PhD,9,53279,5,1.6,0,11,6,77,0
+EMP-1158,HR,High School,25,70903,4,3.2,0,31,8,87,0
+EMP-1159,Operations,PhD,20,56060,4,4.1,1,12,5,58,1
+EMP-1160,Engineering,PhD,18,80999,5,1.9,1,45,5,58,1
+EMP-1161,Operations,Master's,16,59118,5,3.2,0,6,8,0,0
+EMP-1162,Finance,High School,11,112685,4,2.4,0,30,7,58,0
+EMP-1163,Marketing,Bachelor's,22,50740,1,3.7,1,5,1,69,0
+EMP-1164,Operations,Bachelor's,25,64647,3,1.4,0,28,4,22,0
+EMP-1165,Sales,PhD,4,53638,5,4.8,0,4,4,92,0
+EMP-1166,Operations,High School,11,54179,5,2.4,1,21,6,99,0
+EMP-1167,Finance,Master's,4,87936,1,4.4,1,32,0,90,0
+EMP-1168,Finance,Master's,0,84436,4,1.9,0,4,7,21,1
+EMP-1169,Sales,Bachelor's,4,68182,3,4.4,0,36,5,92,0
+EMP-1170,Marketing,Bachelor's,0,81141,5,1.7,0,6,2,53,0
+EMP-1171,Engineering,PhD,12,101205,5,4.7,0,5,0,100,0
+EMP-1172,Marketing,Bachelor's,17,49189,1,1.4,0,30,1,84,0
+EMP-1173,Engineering,Master's,10,75522,2,2.7,0,15,7,6,1
+EMP-1174,Finance,High School,4,81207,1,4.2,0,31,4,89,0
+EMP-1175,Operations,Master's,2,58683,5,3.3,0,15,2,72,0
+EMP-1176,Finance,Master's,14,63673,2,4.5,0,18,7,98,0
+EMP-1177,Engineering,Bachelor's,13,104906,1,4.8,0,31,3,39,0
+EMP-1178,Finance,PhD,2,85895,1,1.1,0,15,2,8,1
+EMP-1179,HR,PhD,9,85052,2,4.9,0,17,8,97,0
+EMP-1180,Sales,PhD,10,75937,5,1.2,0,3,6,57,0
+EMP-1181,Sales,Master's,18,63785,5,1.9,0,35,8,24,0
+EMP-1182,Finance,Master's,9,92852,2,2.5,0,26,2,69,0
+EMP-1183,Engineering,High School,10,92353,3,1.2,0,26,5,57,0
+EMP-1184,Finance,High School,10,71433,4,1.6,0,39,0,69,0
+EMP-1185,Marketing,High School,24,76420,3,1.4,0,43,1,29,0
+EMP-1186,Engineering,High School,2,111716,5,4.8,1,10,5,37,0
+EMP-1187,Operations,High School,14,54662,4,1.2,0,26,5,29,1
+EMP-1188,Marketing,Bachelor's,8,63017,2,5.0,0,29,5,100,0
+EMP-1189,Finance,High School,11,74072,1,1.0,0,6,5,14,0
+EMP-1190,Marketing,Master's,6,87550,3,4.9,0,29,5,4,0
+EMP-1191,HR,Bachelor's,9,33706,1,4.8,0,9,7,76,0
+EMP-1192,Finance,High School,1,101352,5,3.7,0,4,0,50,0
+EMP-1193,Marketing,Bachelor's,21,55075,5,1.9,0,45,1,0,0
+EMP-1194,Marketing,Master's,11,67663,2,2.7,0,5,1,69,0
+EMP-1195,Marketing,Master's,20,67698,5,4.6,0,40,2,69,0
+EMP-1196,Marketing,PhD,11,65701,3,3.7,0,5,0,7,1
+EMP-1197,HR,PhD,15,48813,5,4.8,1,36,0,9,1
+EMP-1198,Finance,Master's,12,76495,1,4.1,0,45,2,91,0
+EMP-1199,Sales,Master's,21,53272,2,3.3,1,15,0,0,0
+EMP-1200,HR,Master's,15,35560,2,2.3,1,1,1,63,1
+EMP-1201,Sales,High School,12,76525,3,2.0,0,30,8,32,1
+EMP-1202,Sales,Master's,18,78942,5,3.8,1,22,1,8,0
+EMP-1203,Engineering,High School,23,98615,1,3.3,0,23,3,0,0
+EMP-1204,Operations,High School,24,73481,4,3.0,1,6,6,50,0
+EMP-1205,HR,Master's,7,55140,2,3.5,1,30,5,96,0
+EMP-1206,Finance,PhD,17,84663,3,4.4,0,20,2,50,0
+EMP-1207,Engineering,High School,7,76816,2,2.7,0,45,2,58,0
+EMP-1208,Marketing,Bachelor's,11,59016,4,4.9,0,1,7,14,0
+EMP-1209,Engineering,High School,25,94219,3,4.4,1,12,3,55,0
+EMP-1210,Operations,High School,5,76714,2,1.3,0,34,7,92,0
+EMP-1211,Engineering,PhD,21,110563,3,3.3,0,14,8,47,0
+EMP-1212,Marketing,Bachelor's,17,41932,3,3.3,0,46,1,48,0
+EMP-1213,Finance,Bachelor's,16,72408,1,3.8,0,31,8,97,0
+EMP-1214,Operations,PhD,19,58513,4,3.4,1,12,8,35,0
+EMP-1215,Marketing,PhD,9,60647,1,3.6,0,11,0,6,0
+EMP-1216,Sales,Bachelor's,17,72829,2,3.5,0,4,4,11,0
+EMP-1217,Marketing,High School,8,77207,4,4.9,0,5,6,46,0
+EMP-1218,Finance,Bachelor's,19,74279,2,3.9,0,4,4,91,0
+EMP-1219,Operations,Master's,4,32401,2,4.4,1,9,1,31,0
+EMP-1220,Marketing,PhD,22,76065,2,3.0,0,17,6,25,0
+EMP-1221,Engineering,PhD,21,125118,1,2.4,0,30,7,45,1
+EMP-1222,HR,High School,18,75339,2,4.1,0,27,1,60,0
+EMP-1223,Marketing,Bachelor's,12,75559,5,1.2,0,8,0,33,0
+EMP-1224,Sales,Bachelor's,23,58349,5,2.5,1,8,6,62,0
+EMP-1225,Engineering,PhD,16,91914,1,2.5,0,26,7,96,0
+EMP-1226,Engineering,Master's,12,96519,2,1.3,0,4,4,74,0
+EMP-1227,Marketing,PhD,24,79936,3,2.2,1,13,4,77,0
+EMP-1228,Sales,Bachelor's,22,72464,1,2.2,0,9,2,49,1
+EMP-1229,Sales,PhD,13,85382,1,1.4,0,43,2,94,0
+EMP-1230,Marketing,High School,20,52586,2,1.4,0,35,7,76,0
+EMP-1231,Operations,Bachelor's,19,50548,1,4.0,0,47,4,91,0
+EMP-1232,Engineering,Bachelor's,21,76679,3,1.9,0,47,4,58,0
+EMP-1233,Sales,Bachelor's,11,56550,1,2.5,1,3,3,9,0
+EMP-1234,Engineering,Master's,22,109744,5,3.0,1,24,7,99,0
+EMP-1235,Operations,PhD,12,29873,5,3.7,0,38,4,92,0
+EMP-1236,Operations,Master's,10,68404,2,2.7,0,26,6,93,0
+EMP-1237,Finance,Master's,24,75363,5,2.5,0,9,1,22,0
+EMP-1238,Marketing,Master's,9,52289,1,3.3,0,33,1,43,0
+EMP-1239,Sales,PhD,24,83546,4,3.4,0,26,4,57,0
+EMP-1240,Sales,High School,3,76718,4,4.5,1,18,2,49,0
+EMP-1241,Engineering,Bachelor's,9,86163,1,5.0,0,16,2,53,0
+EMP-1242,Engineering,Bachelor's,9,100231,2,3.9,1,43,7,28,0
+EMP-1243,Engineering,PhD,21,64172,1,1.1,0,34,5,21,0
+EMP-1244,Sales,Bachelor's,3,91312,4,1.4,0,14,5,84,0
+EMP-1245,Marketing,Master's,23,76612,2,2.7,0,18,7,6,0
+EMP-1246,Engineering,Bachelor's,15,108380,1,3.8,0,15,7,59,0
+EMP-1247,HR,Bachelor's,4,96441,5,2.7,0,30,0,14,0
+EMP-1248,Marketing,High School,1,62175,3,4.3,0,2,5,41,0
+EMP-1249,Operations,Bachelor's,16,51324,1,1.1,0,47,2,8,0
+EMP-1250,Marketing,High School,5,55612,2,1.5,1,50,3,97,1
+EMP-1251,HR,High School,16,80019,1,3.0,1,13,6,79,1
+EMP-1252,Marketing,Bachelor's,11,60403,4,1.7,0,37,7,100,0
+EMP-1253,Sales,Bachelor's,11,52468,2,3.9,0,16,2,21,0
+EMP-1254,Sales,Bachelor's,20,60382,2,3.8,1,1,4,46,0
+EMP-1255,HR,PhD,22,34192,2,4.1,1,6,8,44,1
+EMP-1256,Engineering,PhD,15,68882,5,4.9,1,8,8,20,0
+EMP-1257,Sales,High School,12,89713,1,1.4,0,23,8,28,1
+EMP-1258,Finance,PhD,21,44365,1,4.9,0,46,4,68,0
+EMP-1259,Marketing,Bachelor's,24,50834,4,2.9,0,10,3,27,0
+EMP-1260,Operations,Master's,4,60602,5,1.1,1,10,5,71,0
+EMP-1261,Operations,Bachelor's,23,61915,5,1.6,0,12,5,51,0
+EMP-1262,Engineering,Bachelor's,12,107830,3,1.8,0,41,7,31,0
+EMP-1263,Engineering,PhD,20,123675,1,3.1,1,18,1,30,0
+EMP-1264,Engineering,Master's,15,89728,5,4.8,0,10,0,84,0
+EMP-1265,Engineering,Master's,7,85550,4,1.7,0,43,6,29,0
+EMP-1266,Finance,Master's,23,65893,1,2.3,1,21,4,72,0
+EMP-1267,Engineering,PhD,25,97368,2,4.7,0,47,4,9,0
+EMP-1268,Engineering,High School,18,97312,3,2.7,1,37,6,75,0
+EMP-1269,Sales,High School,18,47684,3,2.8,0,31,0,17,0
+EMP-1270,Engineering,Bachelor's,8,115067,1,1.3,0,47,1,19,0
+EMP-1271,Marketing,PhD,2,100821,2,3.3,0,30,8,72,0
+EMP-1272,Operations,PhD,14,38895,5,2.9,1,15,1,77,0
+EMP-1273,Sales,Master's,4,80800,4,3.6,0,45,8,68,1
+EMP-1274,Finance,Master's,15,70693,2,4.4,0,13,1,77,0
+EMP-1275,Engineering,Master's,20,82399,4,2.3,1,12,3,15,0
+EMP-1276,Sales,PhD,1,80830,3,4.4,0,18,4,72,0
+EMP-1277,Operations,PhD,14,71723,3,2.9,0,36,7,50,1
+EMP-1278,Marketing,Master's,9,40564,4,2.6,0,6,6,25,0
+EMP-1279,HR,High School,11,52941,4,3.8,1,2,6,31,0
+EMP-1280,Marketing,PhD,10,59677,1,3.4,0,40,2,59,0
+EMP-1281,HR,PhD,2,43951,1,4.5,0,15,5,26,0
+EMP-1282,Engineering,Bachelor's,22,83425,1,1.7,0,30,6,86,1
+EMP-1283,Sales,Master's,13,82178,3,1.9,1,34,8,72,1
+EMP-1284,Marketing,Master's,19,38389,4,3.6,1,19,3,39,0
+EMP-1285,Operations,Bachelor's,8,76055,1,4.2,0,49,3,90,0
+EMP-1286,Marketing,Bachelor's,8,54169,5,4.5,0,10,3,6,0
+EMP-1287,Finance,Bachelor's,10,74194,5,2.7,0,37,8,82,0
+EMP-1288,Finance,PhD,18,87471,2,1.6,0,9,0,88,0
+EMP-1289,Sales,Master's,3,60750,4,4.0,0,13,4,80,0
+EMP-1290,Operations,High School,25,43398,5,1.5,0,3,4,35,1
+EMP-1291,Finance,Bachelor's,13,87080,3,2.5,1,37,0,3,0
+EMP-1292,Sales,PhD,23,75026,1,1.8,0,23,8,90,0
+EMP-1293,Finance,PhD,12,74952,2,2.3,0,1,8,55,0
+EMP-1294,Engineering,Master's,18,67143,3,3.8,0,26,6,28,0
+EMP-1295,Engineering,Bachelor's,2,72106,2,4.7,0,19,2,24,1
+EMP-1296,HR,Bachelor's,5,82485,1,4.4,1,17,6,26,0
+EMP-1297,Operations,PhD,3,44896,1,2.2,0,33,6,100,0
+EMP-1298,Finance,Master's,0,106003,3,3.8,0,25,0,19,0
+EMP-1299,Operations,Bachelor's,2,60414,4,2.8,1,3,4,26,0
+EMP-1300,Marketing,Master's,1,75441,3,4.8,1,28,6,43,0
+EMP-1301,Sales,Bachelor's,14,85397,3,3.9,0,13,2,66,0
+EMP-1302,Sales,Bachelor's,19,70550,1,1.5,0,14,0,29,0
+EMP-1303,Engineering,High School,7,93023,2,2.0,0,43,6,100,1
+EMP-1304,HR,Master's,11,62008,4,1.6,0,16,0,22,0
+EMP-1305,Marketing,Bachelor's,20,64098,3,1.8,1,48,8,98,0
+EMP-1306,Marketing,Bachelor's,15,66742,3,3.9,0,35,4,58,0
+EMP-1307,Engineering,High School,25,98198,5,4.2,0,6,7,91,0
+EMP-1308,Sales,PhD,5,65798,1,4.5,1,17,8,59,0
+EMP-1309,Operations,PhD,24,48199,1,4.3,0,21,4,52,0
+EMP-1310,Engineering,Bachelor's,19,99641,2,4.7,1,35,7,19,0
+EMP-1311,Operations,Bachelor's,15,35211,2,2.4,0,21,0,74,1
+EMP-1312,Operations,Bachelor's,10,36010,3,3.9,0,16,7,31,0
+EMP-1313,Operations,High School,6,71683,4,3.3,0,9,1,11,0
+EMP-1314,Engineering,PhD,3,56724,1,1.9,0,48,0,85,0
+EMP-1315,Engineering,Bachelor's,14,87470,1,4.5,0,39,2,45,0
+EMP-1316,Engineering,High School,18,115459,3,1.7,0,32,1,22,0
+EMP-1317,Sales,PhD,4,66313,4,4.8,0,12,2,2,0
+EMP-1318,Marketing,PhD,9,69330,2,2.5,0,13,3,94,0
+EMP-1319,Operations,Master's,0,60933,5,4.3,1,29,0,39,0
+EMP-1320,Finance,High School,16,59716,3,1.0,0,24,6,98,0
+EMP-1321,Finance,PhD,21,80115,3,1.3,0,32,4,79,0
+EMP-1322,Operations,PhD,5,37997,2,1.6,0,15,4,23,0
+EMP-1323,HR,Bachelor's,15,72806,4,2.3,1,2,6,10,0
+EMP-1324,HR,Bachelor's,11,52003,5,1.5,0,10,4,14,0
+EMP-1325,Engineering,PhD,10,92800,4,1.9,1,15,6,31,1
+EMP-1326,HR,Bachelor's,21,58384,4,1.7,0,3,6,48,0
+EMP-1327,Engineering,Master's,10,86471,3,3.5,1,7,3,26,0
+EMP-1328,Operations,Bachelor's,3,58145,1,1.2,0,46,2,8,0
+EMP-1329,Operations,High School,2,73382,2,4.4,1,24,4,65,0
+EMP-1330,Operations,Master's,3,50502,4,3.2,0,1,1,97,0
+EMP-1331,Finance,Master's,3,61901,5,2.3,0,20,2,86,1
+EMP-1332,Engineering,PhD,1,97596,5,4.7,0,16,5,66,0
+EMP-1333,Marketing,Master's,24,55984,4,3.6,1,50,1,76,0
+EMP-1334,HR,Bachelor's,23,68647,2,1.4,1,12,1,24,0
+EMP-1335,Sales,Master's,0,79127,3,3.8,1,35,3,14,1
+EMP-1336,Marketing,PhD,23,47129,5,4.1,0,40,7,19,1
+EMP-1337,HR,High School,18,61622,5,3.4,0,42,2,65,0
+EMP-1338,Operations,Bachelor's,6,69529,1,1.9,0,46,0,7,0
+EMP-1339,Engineering,PhD,11,107157,2,4.0,0,13,1,0,0
+EMP-1340,Marketing,High School,20,91167,3,2.0,0,23,8,88,1
+EMP-1341,Sales,High School,13,77855,5,1.7,0,4,7,50,0
+EMP-1342,Finance,Bachelor's,22,54596,4,4.7,0,33,6,86,0
+EMP-1343,Sales,High School,6,81529,4,2.6,0,41,8,96,0
+EMP-1344,HR,High School,5,54353,4,3.2,0,13,2,84,0
+EMP-1345,Finance,High School,25,84232,2,1.8,1,44,8,65,0
+EMP-1346,Operations,High School,7,49363,5,3.9,1,26,7,63,0
+EMP-1347,HR,Bachelor's,3,67829,1,2.7,0,1,8,66,0
+EMP-1348,Engineering,PhD,20,99375,1,3.5,0,8,7,64,0
+EMP-1349,Operations,Bachelor's,3,44572,3,4.9,0,35,4,44,0
+EMP-1350,Operations,PhD,15,64813,2,3.8,0,35,6,97,0
+EMP-1351,Sales,Bachelor's,19,90254,3,3.3,1,20,8,75,0
+EMP-1352,Finance,PhD,5,74090,3,3.7,0,48,4,17,1
+EMP-1353,Finance,PhD,19,88883,1,2.8,0,28,4,8,0
+EMP-1354,HR,PhD,18,47320,5,1.0,0,17,8,45,0
+EMP-1355,Operations,Bachelor's,19,43281,5,2.1,1,39,8,38,0
+EMP-1356,Engineering,High School,13,82962,4,3.1,0,25,4,99,0
+EMP-1357,Finance,Bachelor's,17,82927,1,2.1,0,43,8,50,0
+EMP-1358,Engineering,PhD,10,102343,1,1.7,1,26,4,70,0
+EMP-1359,Finance,Master's,1,78351,1,4.4,1,23,8,13,0
+EMP-1360,Sales,PhD,0,52473,5,1.8,0,20,8,70,1
+EMP-1361,Sales,High School,19,63530,5,3.9,1,36,5,53,0
+EMP-1362,Sales,Master's,0,92502,3,4.7,1,47,6,97,1
+EMP-1363,Operations,Bachelor's,12,85718,1,3.4,0,2,5,49,0
+EMP-1364,Marketing,Master's,3,41067,2,4.3,0,28,7,72,0
+EMP-1365,Engineering,PhD,16,85878,4,4.7,0,11,6,82,0
+EMP-1366,Engineering,Master's,0,113945,4,2.5,0,19,4,32,1
+EMP-1367,Sales,Master's,19,86283,5,4.8,0,28,8,51,0
+EMP-1368,Marketing,Master's,5,63677,2,4.1,1,40,6,61,0
+EMP-1369,Sales,High School,10,73997,4,4.1,1,39,0,42,0
+EMP-1370,Sales,PhD,6,89707,3,2.8,1,25,4,69,0
+EMP-1371,Marketing,Bachelor's,21,56008,3,2.5,1,7,3,68,0
+EMP-1372,Sales,Bachelor's,10,98238,2,2.1,0,45,0,0,1
+EMP-1373,Operations,High School,7,56084,4,1.5,1,46,7,30,1
+EMP-1374,Operations,Bachelor's,4,43800,2,2.7,1,40,5,71,0
+EMP-1375,Marketing,Master's,22,52565,3,3.2,1,11,5,17,0
+EMP-1376,Operations,High School,10,60978,5,2.3,0,4,5,6,1
+EMP-1377,Finance,PhD,20,84424,1,2.5,0,20,4,60,0
+EMP-1378,Sales,Master's,24,63046,2,2.2,0,8,7,15,0
+EMP-1379,Marketing,Master's,18,72777,3,3.8,0,19,3,4,0
+EMP-1380,Marketing,High School,7,46505,2,1.8,0,45,3,30,0
+EMP-1381,Operations,PhD,16,56359,5,4.9,0,33,8,22,1
+EMP-1382,Finance,PhD,2,74424,5,2.9,1,12,5,87,0
+EMP-1383,Engineering,Bachelor's,10,102415,2,1.5,0,21,3,61,0
+EMP-1384,Finance,Master's,1,95538,1,2.4,0,25,7,11,1
+EMP-1385,Operations,PhD,15,66518,4,4.0,0,38,1,39,0
+EMP-1386,Sales,PhD,6,73164,5,3.3,0,17,5,6,0
+EMP-1387,Finance,High School,18,72513,5,3.3,1,35,8,43,1
+EMP-1388,HR,High School,7,43677,2,4.3,0,46,1,69,0
+EMP-1389,Finance,PhD,13,71365,5,2.2,1,18,8,99,0
+EMP-1390,Finance,Master's,9,54012,5,3.9,0,50,7,42,0
+EMP-1391,Operations,High School,22,30825,5,2.4,0,38,0,22,0
+EMP-1392,Sales,High School,2,51483,5,3.4,0,9,4,67,0
+EMP-1393,Finance,High School,6,87183,5,4.6,0,22,8,38,0
+EMP-1394,Marketing,PhD,10,74891,2,2.7,0,34,1,10,0
+EMP-1395,Sales,PhD,23,45418,2,3.6,1,35,1,99,0
+EMP-1396,Engineering,Master's,18,96168,4,4.3,1,37,0,2,0
+EMP-1397,Operations,Bachelor's,25,98839,5,3.6,0,7,7,59,0
+EMP-1398,Finance,Master's,1,74177,4,4.7,0,6,5,95,0
+EMP-1399,Finance,Master's,17,86170,1,4.0,0,13,2,86,0
+EMP-1400,HR,Bachelor's,0,59814,5,2.0,0,37,7,39,1
+EMP-1401,Sales,High School,20,62366,3,2.4,1,45,8,41,0
+EMP-1402,Finance,Master's,25,94265,1,1.2,0,14,7,26,0
+EMP-1403,HR,Bachelor's,2,70511,3,4.7,0,25,6,17,0
+EMP-1404,HR,High School,2,62857,5,2.6,1,46,0,80,0
+EMP-1405,Marketing,PhD,17,78593,3,4.9,0,6,5,81,0
+EMP-1406,Marketing,PhD,14,61786,3,4.4,0,37,2,45,0
+EMP-1407,Marketing,High School,25,59513,1,1.4,1,43,2,65,0
+EMP-1408,Sales,PhD,15,53487,2,3.2,0,27,0,43,0
+EMP-1409,Sales,High School,9,71440,2,3.1,0,46,6,9,0
+EMP-1410,Engineering,Master's,3,78461,3,3.5,1,27,4,5,0
+EMP-1411,Marketing,PhD,3,48779,1,1.8,0,14,0,33,1
+EMP-1412,Sales,Master's,15,56246,5,4.5,1,30,1,67,0
+EMP-1413,Finance,PhD,7,87595,5,2.3,1,37,0,53,1
+EMP-1414,HR,Bachelor's,12,58397,5,3.5,0,12,8,68,1
+EMP-1415,Marketing,Master's,19,90150,5,2.8,1,8,3,98,0
+EMP-1416,Marketing,PhD,17,64857,4,1.5,1,36,8,15,1
+EMP-1417,Engineering,High School,24,78507,4,4.4,0,13,4,26,0
+EMP-1418,Finance,Master's,16,82028,5,3.0,0,33,3,93,0
+EMP-1419,Sales,Master's,6,37794,4,2.1,0,7,3,91,1
+EMP-1420,Engineering,High School,19,128058,3,1.8,0,12,8,16,0
+EMP-1421,HR,Master's,4,62593,3,2.1,1,5,2,29,1
+EMP-1422,Engineering,High School,19,116285,4,2.8,1,2,0,90,0
+EMP-1423,Operations,Bachelor's,15,59737,5,4.4,1,18,5,99,0
+EMP-1424,Sales,Bachelor's,17,66734,4,3.9,0,10,4,69,0
+EMP-1425,HR,PhD,0,55884,5,3.9,0,17,6,26,0
+EMP-1426,Sales,Bachelor's,5,37476,3,4.2,1,12,6,12,1
+EMP-1427,Engineering,PhD,17,128270,5,1.2,1,7,6,27,0
+EMP-1428,Engineering,Bachelor's,15,113801,4,3.8,1,50,0,4,0
+EMP-1429,Finance,High School,10,81420,2,2.6,0,37,5,25,0
+EMP-1430,HR,PhD,17,58161,4,2.9,0,16,2,42,0
+EMP-1431,Finance,Bachelor's,0,78937,1,4.2,1,49,0,83,0
+EMP-1432,HR,PhD,5,63855,5,4.3,0,5,6,63,0
+EMP-1433,Sales,Master's,5,76095,1,1.1,0,48,6,14,0
+EMP-1434,HR,Bachelor's,3,42890,1,2.9,1,27,0,18,1
+EMP-1435,Sales,Bachelor's,24,62017,3,2.2,0,24,2,11,0
+EMP-1436,Operations,High School,12,68668,2,4.6,1,38,4,39,1
+EMP-1437,Operations,Bachelor's,14,56326,4,4.5,0,27,5,40,1
+EMP-1438,Engineering,High School,7,109967,1,3.6,0,44,2,34,0
+EMP-1439,Marketing,Bachelor's,22,57129,3,3.3,0,7,1,73,0
+EMP-1440,Operations,PhD,3,40331,5,4.7,1,49,4,93,0
+EMP-1441,Finance,PhD,25,111343,5,4.5,1,9,3,59,0
+EMP-1442,HR,Bachelor's,1,74787,3,2.2,1,29,8,11,0
+EMP-1443,Finance,Bachelor's,3,70334,5,1.1,1,6,6,38,0
+EMP-1444,Engineering,Bachelor's,1,74841,5,4.7,0,26,2,25,0
+EMP-1445,Marketing,High School,7,78949,3,3.2,0,33,2,15,0
+EMP-1446,Sales,Bachelor's,18,85053,3,2.7,1,5,2,25,0
+EMP-1447,Operations,Master's,23,51681,4,3.7,0,22,0,26,0
+EMP-1448,Sales,PhD,0,72665,5,2.5,0,30,3,75,0
+EMP-1449,Engineering,High School,19,96074,1,1.0,0,8,4,15,0
+EMP-1450,HR,Bachelor's,25,79746,1,2.5,0,9,7,25,0
+EMP-1451,HR,PhD,23,60329,5,3.7,0,48,0,49,0
+EMP-1452,Engineering,PhD,17,98806,5,5.0,0,31,4,49,0
+EMP-1453,Sales,Master's,1,56948,1,1.1,0,44,3,31,0
+EMP-1454,HR,High School,3,78550,2,4.8,1,21,1,84,1
+EMP-1455,Finance,Master's,17,64716,3,3.8,0,10,0,24,0
+EMP-1456,Operations,PhD,8,62501,1,2.5,0,27,0,57,0
+EMP-1457,Marketing,Master's,12,44131,5,3.4,1,26,6,56,0
+EMP-1458,Sales,Bachelor's,22,74918,2,2.1,0,46,8,11,1
+EMP-1459,Operations,Master's,16,56724,2,4.7,0,1,2,50,0
+EMP-1460,Sales,PhD,1,52650,1,3.0,0,15,5,81,0
+EMP-1461,Sales,PhD,13,66591,3,1.6,0,2,0,37,0
+EMP-1462,Engineering,High School,5,60750,5,4.8,0,44,6,8,0
+EMP-1463,Operations,PhD,5,22936,3,2.4,1,8,0,7,0
+EMP-1464,HR,Bachelor's,19,62358,4,2.6,1,34,2,58,1
+EMP-1465,Engineering,Bachelor's,0,99481,1,3.9,0,37,6,8,0
+EMP-1466,Marketing,PhD,2,80462,3,4.8,0,28,5,28,1
+EMP-1467,Operations,Master's,24,70480,3,2.2,0,42,2,18,0
+EMP-1468,HR,High School,13,89239,3,2.5,0,22,3,0,0
+EMP-1469,Marketing,Master's,15,62713,2,4.9,0,16,5,71,0
+EMP-1470,HR,Bachelor's,2,44619,2,1.7,0,30,2,50,1
+EMP-1471,HR,Master's,0,60854,5,2.6,0,45,6,19,0
+EMP-1472,Sales,PhD,8,107345,5,4.5,0,33,4,79,0
+EMP-1473,Marketing,Bachelor's,15,61130,4,4.3,0,24,0,4,0
+EMP-1474,HR,Bachelor's,3,64416,5,2.9,0,21,4,26,0
+EMP-1475,Marketing,Bachelor's,1,53036,3,3.9,0,8,2,11,0
+EMP-1476,Marketing,Bachelor's,25,46197,5,4.0,0,2,6,84,0
+EMP-1477,Operations,PhD,8,33069,3,3.6,1,50,3,69,1
+EMP-1478,Finance,Master's,2,63579,1,4.4,0,44,4,64,0
+EMP-1479,Finance,PhD,25,76739,2,3.9,0,35,0,51,0
+EMP-1480,HR,Bachelor's,8,61922,1,4.3,0,24,4,25,0
+EMP-1481,Operations,High School,23,52852,3,1.3,0,8,6,6,1
+EMP-1482,Marketing,PhD,19,64304,1,4.3,1,4,0,25,1
+EMP-1483,Sales,High School,1,51635,2,1.4,0,6,1,35,0
+EMP-1484,Engineering,PhD,0,103392,4,4.3,1,48,1,75,0
+EMP-1485,HR,PhD,24,92565,5,2.7,0,10,5,87,0
+EMP-1486,Operations,PhD,19,100394,5,2.0,0,34,5,46,0
+EMP-1487,Engineering,Master's,20,88618,1,1.3,0,34,2,90,0
+EMP-1488,Engineering,High School,0,86082,5,3.7,0,31,2,99,0
+EMP-1489,HR,High School,19,61554,1,3.9,0,28,0,70,0
+EMP-1490,Operations,PhD,16,70892,2,1.5,1,17,7,62,0
+EMP-1491,Engineering,PhD,17,108328,2,2.9,0,36,1,0,1
+EMP-1492,Sales,High School,25,69404,5,2.5,0,1,2,83,0
+EMP-1493,Marketing,PhD,21,67532,3,1.8,0,12,2,15,1
+EMP-1494,HR,PhD,18,106121,5,3.7,0,17,6,85,0
+EMP-1495,HR,PhD,0,71242,4,4.2,0,40,1,31,0
+EMP-1496,Finance,PhD,11,68379,2,1.4,1,20,2,49,1
+EMP-1497,Engineering,Master's,0,61414,4,4.7,1,11,4,27,0
+EMP-1498,Operations,High School,23,47912,2,3.3,1,15,0,1,0
+EMP-1499,Marketing,Master's,3,45374,4,3.4,0,15,0,18,0
