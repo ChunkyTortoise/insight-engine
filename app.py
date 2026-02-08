@@ -7,7 +7,10 @@ import streamlit as st
 
 from insight_engine.attribution import run_all_models
 from insight_engine.cleaner import clean_dataframe
+from insight_engine.clustering import Clusterer
 from insight_engine.dashboard_generator import generate_dashboard
+from insight_engine.feature_lab import FeatureLab
+from insight_engine.forecaster import Forecaster
 from insight_engine.predictor import train_model
 from insight_engine.profiler import profile_dataframe
 from insight_engine.report_generator import generate_report, report_to_markdown
@@ -64,8 +67,28 @@ def main():
         return
 
     # Tabs
-    tab_profile, tab_dashboard, tab_clean, tab_predict, tab_attribution, tab_report = st.tabs(
-        ["📋 Profile", "📈 Dashboard", "🧹 Clean", "🔮 Predict", "📡 Attribution", "📄 Report"]
+    (
+        tab_profile,
+        tab_dashboard,
+        tab_clean,
+        tab_predict,
+        tab_attribution,
+        tab_report,
+        tab_forecast,
+        tab_cluster,
+        tab_features,
+    ) = st.tabs(
+        [
+            "📋 Profile",
+            "📈 Dashboard",
+            "🧹 Clean",
+            "🔮 Predict",
+            "📡 Attribution",
+            "📄 Report",
+            "📉 Forecast",
+            "🔵 Cluster",
+            "🧪 Features",
+        ]
     )
 
     # Profile tab
@@ -165,6 +188,116 @@ def main():
         markdown = report_to_markdown(report)
         st.markdown(markdown)
         st.download_button("Download Report (Markdown)", markdown, "report.md", "text/markdown")
+
+    # Forecast tab
+    with tab_forecast:
+        st.subheader("Time Series Forecasting")
+        ts_path = DEMO_DIR / "time_series_sales.csv"
+
+        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+        use_ts_demo = False
+
+        if ts_path.exists():
+            use_ts = st.checkbox("Use time series demo dataset", value=True)
+            if use_ts:
+                ts_df = pd.read_csv(ts_path)
+                forecast_col = "sales"
+                use_ts_demo = True
+
+        if not use_ts_demo:
+            if not numeric_cols:
+                st.info("No numeric columns available for forecasting.")
+            else:
+                forecast_col = st.selectbox("Select column to forecast:", numeric_cols)
+                ts_df = df
+
+        if numeric_cols or use_ts_demo:
+            horizon = st.slider("Forecast horizon (steps)", 1, 30, 5)
+            if st.button("Run Forecast"):
+                series = ts_df[forecast_col].dropna().tolist()
+                forecaster = Forecaster()
+                comparison = forecaster.compare_forecasts(series, horizon=horizon)
+
+                # Results table
+                rows = []
+                for method, result in comparison.results.items():
+                    rows.append(
+                        {
+                            "Method": method,
+                            "MAE": round(result.mae, 4),
+                            "RMSE": round(result.rmse, 4),
+                            "MAPE": round(result.mape, 4),
+                        }
+                    )
+                st.dataframe(pd.DataFrame(rows), width="stretch")
+                st.success(f"Best method: **{comparison.best_method}** (MAE={comparison.best_mae:.4f})")
+
+                # Plot actual vs predictions
+                for method, result in comparison.results.items():
+                    chart_df = pd.DataFrame(
+                        {
+                            "Step": list(range(len(series))) + list(range(len(series), len(series) + horizon)),
+                            "Value": series + result.predictions,
+                            "Type": ["Actual"] * len(series) + ["Predicted"] * horizon,
+                        }
+                    )
+                    st.write(f"**{method}**")
+                    st.line_chart(chart_df.pivot(index="Step", columns="Type", values="Value"))
+
+    # Cluster tab
+    with tab_cluster:
+        st.subheader("Clustering Analysis")
+        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+
+        if len(numeric_cols) < 2:
+            st.info("Need at least 2 numeric columns for clustering.")
+        else:
+            selected_cols = st.multiselect("Select numeric columns:", numeric_cols, default=numeric_cols[:3])
+
+            if len(selected_cols) >= 2 and st.button("Run Clustering"):
+                data = df[selected_cols].dropna().values
+                clusterer = Clusterer()
+                comparison = clusterer.compare(data)
+
+                for method, result in comparison.results.items():
+                    st.write(f"**{method}**: {result.n_clusters} clusters, silhouette={result.silhouette:.4f}")
+                    st.write(f"Cluster sizes: {result.cluster_sizes}")
+
+                st.success(f"Best method: **{comparison.best_method}** (silhouette={comparison.best_silhouette:.4f})")
+
+                # Scatter plot of first 2 columns colored by best method labels
+                best = comparison.results[comparison.best_method]
+                clean_data = df[selected_cols].dropna()
+                scatter_df = pd.DataFrame(
+                    {
+                        selected_cols[0]: clean_data[selected_cols[0]].values,
+                        selected_cols[1]: clean_data[selected_cols[1]].values,
+                        "Cluster": [str(lbl) for lbl in best.labels],
+                    }
+                )
+                st.scatter_chart(scatter_df, x=selected_cols[0], y=selected_cols[1], color="Cluster")
+
+    # Features tab
+    with tab_features:
+        st.subheader("Feature Engineering")
+        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+
+        if numeric_cols:
+            scale_method = st.selectbox("Scaling method:", ["standard", "minmax", "robust"])
+            scale_cols = st.multiselect("Columns to scale:", numeric_cols, default=numeric_cols[:2])
+
+            if scale_cols and st.button("Scale Columns"):
+                lab = FeatureLab()
+                result = lab.scale(df, scale_cols, method=scale_method)
+                st.write(f"New columns: {result.new_columns}")
+                st.dataframe(result.data[scale_cols + result.new_columns].head(20), width="stretch")
+
+        if st.button("Auto-Engineer Features"):
+            lab = FeatureLab()
+            result = lab.auto_engineer(df)
+            st.success(result.description)
+            st.write(f"New columns ({len(result.new_columns)}): {result.new_columns}")
+            st.dataframe(result.data.head(20), width="stretch")
 
 
 if __name__ == "__main__":

@@ -156,7 +156,39 @@ def generate_hr_attrition():
     return path
 
 
+def generate_time_series_sales():
+    """Time series sales dataset for forecasting."""
+    import math
+
+    rows = []
+    start_date = datetime(2024, 1, 1)
+
+    for day in range(365):
+        date = start_date + timedelta(days=day)
+        trend = 100 + 0.1 * day
+        seasonality = 20 * math.sin(2 * math.pi * day / 90)
+        noise = random.uniform(-10, 10)
+        sales = round(trend + seasonality + noise, 2)
+
+        rows.append(
+            {
+                "date": date.strftime("%Y-%m-%d"),
+                "sales": sales,
+                "trend": round(trend, 2),
+                "seasonality": round(seasonality, 2),
+            }
+        )
+
+    path = os.path.join(DEMO_DIR, "time_series_sales.csv")
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+    return path
+
+
 if __name__ == "__main__":
     print(f"Generated: {generate_ecommerce()}")
     print(f"Generated: {generate_marketing_touchpoints()}")
     print(f"Generated: {generate_hr_attrition()}")
+    print(f"Generated: {generate_time_series_sales()}")
