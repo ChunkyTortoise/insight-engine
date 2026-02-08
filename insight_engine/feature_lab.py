@@ -20,6 +20,15 @@ class FeatureResult:
     description: str
 
 
+@dataclass
+class SelectionResult:
+    """Result of feature selection."""
+
+    selected_columns: list[str]
+    dropped_columns: list[str]
+    scores: dict[str, float]
+
+
 _SCALERS = {
     "standard": StandardScaler,
     "minmax": MinMaxScaler,
@@ -166,4 +175,250 @@ class FeatureLab:
             new_columns=all_new_cols,
             method="auto",
             description=f"Auto-engineered {len(all_new_cols)} new feature(s)",
+        )
+
+    def select_features(
+        self,
+        df: pd.DataFrame,
+        target: str,
+        method: str = "variance",
+        threshold: float = 0.01,
+    ) -> SelectionResult:
+        """Select features using variance, mutual information, or correlation.
+
+        Methods:
+        - variance: Remove features with variance below threshold
+        - mutual_info: Keep features with mutual info above threshold
+        - correlation: Remove features correlated >threshold with each other
+        """
+        from sklearn.feature_selection import VarianceThreshold, mutual_info_classif, mutual_info_regression
+
+        if method == "variance":
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            if target in numeric_cols:
+                numeric_cols.remove(target)
+
+            if not numeric_cols:
+                return SelectionResult(
+                    selected_columns=[],
+                    dropped_columns=[],
+                    scores={},
+                )
+
+            selector = VarianceThreshold(threshold=threshold)
+            data = df[numeric_cols].values
+            selector.fit(data)
+
+            selected = [col for col, selected in zip(numeric_cols, selector.get_support()) if selected]
+            dropped = [col for col in numeric_cols if col not in selected]
+            scores = {col: float(df[col].var()) for col in numeric_cols}
+
+            return SelectionResult(
+                selected_columns=selected,
+                dropped_columns=dropped,
+                scores=scores,
+            )
+
+        elif method == "mutual_info":
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            if target in numeric_cols:
+                numeric_cols.remove(target)
+
+            if not numeric_cols or target not in df.columns:
+                return SelectionResult(
+                    selected_columns=[],
+                    dropped_columns=[],
+                    scores={},
+                )
+
+            X = df[numeric_cols].values
+            y = df[target].values
+
+            # Determine if classification or regression
+            if len(np.unique(y)) < 10:
+                mi_scores = mutual_info_classif(X, y, random_state=42)
+            else:
+                mi_scores = mutual_info_regression(X, y, random_state=42)
+
+            scores = {col: float(score) for col, score in zip(numeric_cols, mi_scores)}
+            selected = [col for col, score in scores.items() if score >= threshold]
+            dropped = [col for col in numeric_cols if col not in selected]
+
+            return SelectionResult(
+                selected_columns=selected,
+                dropped_columns=dropped,
+                scores=scores,
+            )
+
+        elif method == "correlation":
+            numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+            if target in numeric_cols:
+                numeric_cols.remove(target)
+
+            if not numeric_cols:
+                return SelectionResult(
+                    selected_columns=[],
+                    dropped_columns=[],
+                    scores={},
+                )
+
+            corr_matrix = df[numeric_cols].corr().abs()
+            upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+
+            # Find features to drop
+            to_drop = set()
+            for column in upper_tri.columns:
+                if any(upper_tri[column] > threshold):
+                    to_drop.add(column)
+
+            selected = [col for col in numeric_cols if col not in to_drop]
+            dropped = list(to_drop)
+            scores = {
+                col: float(df[col].corr(df[numeric_cols[0]])) if len(numeric_cols) > 0 else 0.0 for col in numeric_cols
+            }
+
+            return SelectionResult(
+                selected_columns=selected,
+                dropped_columns=dropped,
+                scores=scores,
+            )
+
+        else:
+            raise ValueError(f"Unknown method '{method}'. Choose from: variance, mutual_info, correlation")
+
+    def extract_time_features(self, df: pd.DataFrame, column: str) -> FeatureResult:
+        """Extract time-based features from a datetime column.
+
+        Extracts: day_of_week, month, quarter, year, is_weekend, hour (if time present).
+        """
+        if column not in df.columns:
+            return FeatureResult(
+                data=df.copy(),
+                new_columns=[],
+                method="time_features",
+                description=f"Column '{column}' not found",
+            )
+
+        result_df = df.copy()
+        result_df[column] = pd.to_datetime(result_df[column])
+        new_cols: list[str] = []
+
+        # Day of week (0=Monday, 6=Sunday)
+        col_name = f"{column}_day_of_week"
+        result_df[col_name] = result_df[column].dt.dayofweek
+        new_cols.append(col_name)
+
+        # Month
+        col_name = f"{column}_month"
+        result_df[col_name] = result_df[column].dt.month
+        new_cols.append(col_name)
+
+        # Quarter
+        col_name = f"{column}_quarter"
+        result_df[col_name] = result_df[column].dt.quarter
+        new_cols.append(col_name)
+
+        # Year
+        col_name = f"{column}_year"
+        result_df[col_name] = result_df[column].dt.year
+        new_cols.append(col_name)
+
+        # Is weekend
+        col_name = f"{column}_is_weekend"
+        result_df[col_name] = (result_df[column].dt.dayofweek >= 5).astype(int)
+        new_cols.append(col_name)
+
+        # Hour (if time is present)
+        if result_df[column].dt.hour.sum() > 0:
+            col_name = f"{column}_hour"
+            result_df[col_name] = result_df[column].dt.hour
+            new_cols.append(col_name)
+
+        return FeatureResult(
+            data=result_df,
+            new_columns=new_cols,
+            method="time_features",
+            description=f"Extracted {len(new_cols)} time feature(s) from '{column}'",
+        )
+
+    def bin_numeric(
+        self,
+        df: pd.DataFrame,
+        column: str,
+        n_bins: int = 5,
+        method: str = "equal_width",
+    ) -> FeatureResult:
+        """Bin a numeric column into categories.
+
+        Methods:
+        - equal_width: Equal-width bins using pd.cut
+        - equal_frequency: Equal-frequency bins using pd.qcut
+        """
+        if column not in df.columns:
+            return FeatureResult(
+                data=df.copy(),
+                new_columns=[],
+                method="binning",
+                description=f"Column '{column}' not found",
+            )
+
+        result_df = df.copy()
+        new_col_name = f"{column}_binned"
+
+        if method == "equal_width":
+            result_df[new_col_name] = pd.cut(df[column], bins=n_bins, labels=False)
+        elif method == "equal_frequency":
+            result_df[new_col_name] = pd.qcut(df[column], q=n_bins, labels=False, duplicates="drop")
+        else:
+            raise ValueError(f"Unknown method '{method}'. Choose from: equal_width, equal_frequency")
+
+        return FeatureResult(
+            data=result_df,
+            new_columns=[new_col_name],
+            method=f"binning_{method}",
+            description=f"Binned '{column}' into {n_bins} bins using {method}",
+        )
+
+    def target_encode(
+        self,
+        df: pd.DataFrame,
+        column: str,
+        target: str,
+    ) -> tuple[FeatureResult, dict[str, float]]:
+        """Target encode a categorical column using mean of target.
+
+        Returns (FeatureResult, mapping_dict).
+        """
+        if column not in df.columns or target not in df.columns:
+            return (
+                FeatureResult(
+                    data=df.copy(),
+                    new_columns=[],
+                    method="target_encoding",
+                    description="Column or target not found",
+                ),
+                {},
+            )
+
+        result_df = df.copy()
+        new_col_name = f"{column}_encoded"
+
+        # Compute mean target value per category
+        mapping = df.groupby(column)[target].mean().to_dict()
+
+        # Apply encoding
+        result_df[new_col_name] = df[column].map(mapping)
+
+        # Fill missing with global mean
+        global_mean = df[target].mean()
+        result_df[new_col_name].fillna(global_mean, inplace=True)
+
+        return (
+            FeatureResult(
+                data=result_df,
+                new_columns=[new_col_name],
+                method="target_encoding",
+                description=f"Target encoded '{column}' using '{target}'",
+            ),
+            mapping,
         )

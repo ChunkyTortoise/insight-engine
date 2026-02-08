@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+from sklearn.datasets import make_classification
+from sklearn.preprocessing import LabelEncoder
 
 from insight_engine.attribution import run_all_models
 from insight_engine.cleaner import clean_dataframe
@@ -11,6 +13,8 @@ from insight_engine.clustering import Clusterer
 from insight_engine.dashboard_generator import generate_dashboard
 from insight_engine.feature_lab import FeatureLab
 from insight_engine.forecaster import Forecaster
+from insight_engine.hypertuner import DEFAULT_PARAM_GRIDS, HyperTuner
+from insight_engine.model_observatory import ModelObservatory
 from insight_engine.predictor import train_model
 from insight_engine.profiler import profile_dataframe
 from insight_engine.report_generator import generate_report, report_to_markdown
@@ -77,6 +81,8 @@ def main():
         tab_forecast,
         tab_cluster,
         tab_features,
+        tab_observatory,
+        tab_hypertuning,
     ) = st.tabs(
         [
             "📋 Profile",
@@ -88,6 +94,8 @@ def main():
             "📉 Forecast",
             "🔵 Cluster",
             "🧪 Features",
+            "🔬 Model Observatory",
+            "⚙️ Hypertuning",
         ]
     )
 
@@ -298,6 +306,169 @@ def main():
             st.success(result.description)
             st.write(f"New columns ({len(result.new_columns)}): {result.new_columns}")
             st.dataframe(result.data.head(20), width="stretch")
+
+    # Model Observatory tab
+    with tab_observatory:
+        st.subheader("Model Observatory")
+        st.write("Train and compare multiple classification models on your data.")
+
+        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+        all_cols = df.columns.tolist()
+
+        use_demo_data = st.checkbox("Use demo classification data", value=False, key="obs_demo")
+
+        if use_demo_data:
+            X_obs, y_obs = make_classification(
+                n_samples=300,
+                n_features=6,
+                n_informative=4,
+                n_redundant=1,
+                random_state=42,
+            )
+            obs_feature_names = [f"feature_{i}" for i in range(6)]
+        else:
+            obs_target = st.selectbox("Select target column:", all_cols, key="obs_target")
+            obs_features = st.multiselect(
+                "Select feature columns (numeric):",
+                [c for c in numeric_cols if c != obs_target],
+                default=[c for c in numeric_cols if c != obs_target][:5],
+                key="obs_features",
+            )
+
+            if len(obs_features) < 1:
+                st.info("Select at least 1 numeric feature column.")
+                X_obs, y_obs, obs_feature_names = None, None, None
+            else:
+                clean = df[obs_features + [obs_target]].dropna()
+                X_obs = clean[obs_features].values
+                obs_feature_names = obs_features
+                # Encode target if needed
+                target_vals = clean[obs_target]
+                if target_vals.dtype == object:
+                    le = LabelEncoder()
+                    y_obs = le.fit_transform(target_vals)
+                else:
+                    y_obs = target_vals.values.astype(int)
+
+        available_models = list(ModelObservatory.SUPPORTED_MODELS.keys())
+        selected_models = st.multiselect(
+            "Models to compare:",
+            available_models,
+            default=["random_forest", "logistic_regression", "ridge"],
+            key="obs_models",
+        )
+
+        obs_metric = st.selectbox("Comparison metric:", ["f1", "accuracy", "precision", "recall"], key="obs_metric")
+
+        if X_obs is not None and y_obs is not None and selected_models and st.button("Compare Models"):
+            with st.spinner("Training models..."):
+                observatory = ModelObservatory()
+                report = observatory.compare_models(
+                    X_obs,
+                    y_obs,
+                    models=selected_models,
+                    metric=obs_metric,
+                    feature_names=obs_feature_names,
+                )
+
+            # Results table
+            rows = []
+            for r in report.results:
+                rows.append(
+                    {
+                        "Model": r.name,
+                        "Accuracy": round(r.accuracy, 4),
+                        "Precision": round(r.precision, 4),
+                        "Recall": round(r.recall, 4),
+                        "F1": round(r.f1, 4),
+                        "Time (ms)": round(r.training_time_ms, 1),
+                    }
+                )
+            st.dataframe(pd.DataFrame(rows), width="stretch")
+            st.success(f"Best model: **{report.best_model}** ({obs_metric}={report.best_score:.4f})")
+
+            # Feature importance bar chart
+            if report.feature_rankings:
+                st.subheader("Feature Rankings (avg importance)")
+                ranking_df = pd.DataFrame(report.feature_rankings, columns=["Feature", "Importance"])
+                st.bar_chart(ranking_df.set_index("Feature"))
+
+    # Hypertuning tab
+    with tab_hypertuning:
+        st.subheader("Hyperparameter Tuning")
+        st.write("Find optimal hyperparameters using grid or random search.")
+
+        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+        all_cols = df.columns.tolist()
+
+        use_demo_ht = st.checkbox("Use demo classification data", value=False, key="ht_demo")
+
+        if use_demo_ht:
+            X_ht, y_ht = make_classification(
+                n_samples=200,
+                n_features=5,
+                n_informative=3,
+                n_redundant=1,
+                random_state=42,
+            )
+        else:
+            ht_target = st.selectbox("Select target column:", all_cols, key="ht_target")
+            ht_features = st.multiselect(
+                "Select feature columns (numeric):",
+                [c for c in numeric_cols if c != ht_target],
+                default=[c for c in numeric_cols if c != ht_target][:5],
+                key="ht_features",
+            )
+
+            if len(ht_features) < 1:
+                st.info("Select at least 1 numeric feature column.")
+                X_ht, y_ht = None, None
+            else:
+                clean = df[ht_features + [ht_target]].dropna()
+                X_ht = clean[ht_features].values
+                target_vals = clean[ht_target]
+                if target_vals.dtype == object:
+                    le = LabelEncoder()
+                    y_ht = le.fit_transform(target_vals)
+                else:
+                    y_ht = target_vals.values.astype(int)
+
+        ht_model = st.selectbox("Model to tune:", list(DEFAULT_PARAM_GRIDS.keys()), key="ht_model")
+        ht_method = st.selectbox("Search method:", ["random", "grid"], key="ht_method")
+        ht_cv = st.slider("Cross-validation folds:", 2, 10, 3, key="ht_cv")
+
+        if ht_method == "random":
+            ht_n_iter = st.slider("Random search iterations:", 3, 50, 10, key="ht_n_iter")
+        else:
+            ht_n_iter = 10  # not used for grid
+
+        if X_ht is not None and y_ht is not None and st.button("Run Tuning"):
+            with st.spinner(f"Running {ht_method} search on {ht_model}..."):
+                tuner = HyperTuner()
+                if ht_method == "grid":
+                    tune_result = tuner.grid_search(X_ht, y_ht, ht_model, cv=ht_cv)
+                else:
+                    tune_result = tuner.random_search(X_ht, y_ht, ht_model, n_iter=ht_n_iter, cv=ht_cv)
+
+            st.success(f"Best score: **{tune_result.best_score:.4f}** ({tune_result.search_method} search)")
+            st.write("**Best parameters:**")
+            st.json(tune_result.best_params)
+
+            col1, col2 = st.columns(2)
+            col1.metric("Total combinations", tune_result.total_combinations)
+            col2.metric("Elapsed (ms)", f"{tune_result.elapsed_ms:.1f}")
+
+            # All results table
+            st.subheader("All Results")
+            result_rows = []
+            for entry in tune_result.all_results:
+                row = {"Score": entry["mean_score"], "Rank": entry.get("rank", "")}
+                row.update({f"param_{k}": v for k, v in entry["params"].items()})
+                result_rows.append(row)
+            st.dataframe(
+                pd.DataFrame(result_rows).sort_values("Score", ascending=False),
+                width="stretch",
+            )
 
 
 if __name__ == "__main__":

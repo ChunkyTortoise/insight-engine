@@ -2,19 +2,21 @@
 
 **Marketing teams waste 8+ hours/week building reports from spreadsheets.** Upload a CSV or Excel file and get instant dashboards, predictive models, marketing attribution, and downloadable reports.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/ChunkyTortoise/insight-engine/ci.yml?label=CI)](https://github.com/ChunkyTortoise/insight-engine/actions)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-76_passing-brightgreen)](tests/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-F1C40F.svg)](LICENSE)
+![CI](https://github.com/ChunkyTortoise/insight-engine/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+![Tests](https://img.shields.io/badge/tests-134%20passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit_Cloud-FF4B4B.svg?logo=streamlit&logoColor=white)](https://ct-insight-engine.streamlit.app)
 
 **[Live Demo](https://ct-insight-engine.streamlit.app)** -- try it without installing anything.
 
 ## What This Solves
 
-- **Manual reporting burns time** -- Auto-profiler detects column types, distributions, outliers, and correlations in seconds. Dashboard generator picks the right chart types automatically.
-- **No visibility into which channels drive conversions** -- Four attribution models (first-touch, last-touch, linear, time-decay) show exactly where marketing budget should go.
-- **Predictive modeling requires ML expertise** -- Upload labeled data, pick a target column, get a trained model with accuracy metrics, feature importances, and SHAP explanations.
+- **Manual reporting burns time** -- Auto-profiler detects column types, distributions, outliers, and correlations in seconds
+- **No visibility into which channels drive conversions** -- Four attribution models show exactly where marketing budget should go
+- **Predictive modeling requires ML expertise** -- Upload labeled data, pick a target column, get a trained model with SHAP explanations
+- **No way to segment customers** -- K-means and DBSCAN clustering with silhouette scoring for automatic customer segmentation
+- **Forecasting requires specialized tools** -- Moving average, exponential smoothing, and ensemble forecasts from any time series column
 
 ## Architecture
 
@@ -22,17 +24,35 @@
 CSV/Excel Upload
       |
       v
-┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  Profiler    │───>│  Dashboard Gen   │───>│  Report Gen     │
-│  (auto-type  │    │  (Plotly charts,  │    │  (Markdown/PDF   │
-│   detection) │    │   auto-layout)   │    │   with charts)  │
-└──────┬───────┘    └──────────────────┘    └─────────────────┘
-       │
-       ├───> Cleaner (dedup, standardize, impute)
-       ├───> Predictor (auto-ML, SHAP)
-       ├───> Attribution (4 models)
-       └───> Anomaly Detector (Z-score + IQR)
++--------------+    +------------------+    +-----------------+
+|  Profiler    |--->|  Dashboard Gen   |--->|  Report Gen     |
+|  (auto-type  |    |  (Plotly charts, |    |  (Markdown/PDF  |
+|   detection) |    |   auto-layout)   |    |   with charts)  |
++--------------+    +------------------+    +-----------------+
+       |
+       +---> Cleaner (dedup, standardize, impute)
+       +---> Predictor (auto-ML, SHAP)
+       +---> Attribution (4 models)
+       +---> Anomaly Detector (Z-score + IQR)
+       +---> Clustering (K-means, DBSCAN)
+       +---> Feature Lab (scaling, encoding, polynomials)
+       +---> Forecaster (moving avg, exp smoothing, ensemble)
 ```
+
+## Modules
+
+| Module | File | Description |
+|--------|------|-------------|
+| **Profiler** | `profiler.py` | Auto-detect column types, distributions, outliers, and correlations |
+| **Dashboard Generator** | `dashboard_generator.py` | Plotly histograms, pie charts, heatmaps, scatter matrices |
+| **Data Cleaner** | `cleaner.py` | Dedup (exact + fuzzy), column standardization, smart imputation |
+| **Predictor** | `predictor.py` | Auto-detect classification/regression, gradient boosting, SHAP |
+| **Attribution** | `attribution.py` | First-touch, last-touch, linear, time-decay marketing attribution |
+| **Report Generator** | `report_generator.py` | Markdown reports with findings, metrics, chart placeholders |
+| **Anomaly Detector** | `anomaly_detector.py` | Z-score and IQR outlier detection (stdlib only, no numpy required) |
+| **Clustering** | `clustering.py` | K-means and DBSCAN with silhouette scoring and cluster comparison |
+| **Feature Lab** | `feature_lab.py` | Feature scaling, encoding, polynomial features, interaction terms |
+| **Forecaster** | `forecaster.py` | Moving average, exponential smoothing, linear trend, ensemble forecasts |
 
 ## Quick Start
 
@@ -40,22 +60,9 @@ CSV/Excel Upload
 git clone https://github.com/ChunkyTortoise/insight-engine.git
 cd insight-engine
 pip install -r requirements.txt
-
-# Demo mode -- 3 sample datasets, no config needed
+make test
 make demo
 ```
-
-Or try the **[live demo on Streamlit Cloud](https://ct-insight-engine.streamlit.app)** -- no install required.
-
-### What You Get
-
-1. **Auto-Profiler** -- Column types, null rates, outlier counts, correlations
-2. **Dashboard Generator** -- Histograms, pie charts, heatmaps, scatter matrices (Plotly)
-3. **Data Cleaner** -- Dedup (exact + fuzzy), column standardization, smart imputation
-4. **Predictive Modeling** -- Auto-detects classification/regression, trains gradient boosting, SHAP explanations
-5. **Marketing Attribution** -- First-touch, last-touch, linear, time-decay across any channel data
-6. **Report Generator** -- Markdown reports with findings, metrics, and chart placeholders
-7. **Anomaly Detector** -- Z-score and IQR outlier detection with per-column summaries (stdlib only, no numpy required)
 
 ## Demo Datasets
 
@@ -72,8 +79,9 @@ Or try the **[live demo on Streamlit Cloud](https://ct-insight-engine.streamlit.
 | UI | Streamlit, Plotly |
 | Data | Pandas, NumPy, openpyxl |
 | ML | scikit-learn, XGBoost, SHAP |
-| Testing | pytest |
+| Testing | pytest (134 tests) |
 | CI | GitHub Actions (Python 3.11, 3.12) |
+| Linting | Ruff |
 
 ## Project Structure
 
@@ -87,46 +95,21 @@ insight-engine/
 │   ├── predictor.py                # Auto-ML + SHAP explanations
 │   ├── cleaner.py                  # Dedup, standardize, impute
 │   ├── report_generator.py         # Markdown/PDF report generation
-│   └── anomaly_detector.py         # Z-score + IQR outlier detection
-├── demo_data/
-│   ├── generate_demo_data.py       # Reproducible sample data generator
-│   ├── ecommerce.csv               # 1,000 transactions
-│   ├── marketing_touchpoints.csv   # ~800 touchpoints
-│   └── hr_attrition.csv            # 500 employees
-├── tests/                          # One test file per module
+│   ├── anomaly_detector.py         # Z-score + IQR outlier detection
+│   ├── clustering.py               # K-means, DBSCAN, silhouette scores
+│   ├── feature_lab.py              # Feature scaling, encoding, polynomials
+│   └── forecaster.py               # Time series forecasting (4 methods)
+├── demo_data/                      # 3 sample datasets
+├── tests/                          # 10 test files, one per module
 ├── .github/workflows/ci.yml        # CI pipeline
 ├── Makefile                        # demo, test, lint, setup
 └── requirements.txt
 ```
 
-## Anomaly Detection
-
-Detect outliers in numeric data using Z-score and IQR methods -- no numpy or pandas required:
-
-```python
-from insight_engine.anomaly_detector import AnomalyDetector
-
-detector = AnomalyDetector(z_threshold=3.0, iqr_multiplier=1.5)
-
-# Single column
-data = [10, 11, 10, 12, 10, 11, 10, 200]
-anomalies = detector.detect_zscore(data, column="revenue")
-for a in anomalies:
-    print(f"Row {a.row_index}: {a.value} ({a.direction}, z={a.score})")
-
-# Multiple columns at once (runs both methods, deduplicates)
-results = detector.detect_all({
-    "revenue": [10, 11, 10, 12, 10, 11, 10, 200],
-    "cost": [5, 5, 5, 5, 5, 5, 5, 5],
-})
-print(detector.summary(results))
-# {'total_anomalies': 1, 'columns_affected': 1, 'per_column': {'revenue': 1}, ...}
-```
-
 ## Testing
 
 ```bash
-make test                           # Full suite
+make test                           # Full suite (134 tests)
 python -m pytest tests/ -v          # Verbose output
 python -m pytest tests/test_profiler.py  # Single module
 ```
@@ -134,11 +117,11 @@ python -m pytest tests/test_profiler.py  # Single module
 ## Related Projects
 
 - [EnterpriseHub](https://github.com/ChunkyTortoise/EnterpriseHub) -- Real estate AI platform with BI dashboards and CRM integration
-- [jorge_real_estate_bots](https://github.com/ChunkyTortoise/jorge_real_estate_bots) -- Three-bot lead qualification system (Lead, Buyer, Seller)
-- [ai-orchestrator](https://github.com/ChunkyTortoise/ai-orchestrator) -- AgentForge: unified async LLM interface (Claude, Gemini, OpenAI, Perplexity)
-- [Revenue-Sprint](https://github.com/ChunkyTortoise/Revenue-Sprint) -- AI-powered freelance pipeline: job scanning, proposal generation, prompt injection testing
 - [docqa-engine](https://github.com/ChunkyTortoise/docqa-engine) -- RAG document Q&A with hybrid retrieval and prompt engineering lab
+- [ai-orchestrator](https://github.com/ChunkyTortoise/ai-orchestrator) -- AgentForge: unified async LLM interface (Claude, Gemini, OpenAI, Perplexity)
 - [scrape-and-serve](https://github.com/ChunkyTortoise/scrape-and-serve) -- Web scraping, price monitoring, Excel-to-web apps, and SEO tools
+- [prompt-engineering-lab](https://github.com/ChunkyTortoise/prompt-engineering-lab) -- 8 prompt patterns, A/B testing, TF-IDF evaluation
+- [llm-integration-starter](https://github.com/ChunkyTortoise/llm-integration-starter) -- Production LLM patterns: completion, streaming, function calling, RAG, hardening
 - [Portfolio](https://chunkytortoise.github.io) -- Project showcase and services
 
 ## Deploy

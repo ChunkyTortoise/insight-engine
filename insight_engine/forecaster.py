@@ -26,6 +26,36 @@ class ForecastComparison:
     best_mae: float
 
 
+@dataclass
+class DecompositionResult:
+    """Result of seasonal decomposition."""
+
+    trend: list[float]
+    seasonal: list[float]
+    residual: list[float]
+    period: int
+
+
+@dataclass
+class ConfidenceForecast:
+    """Forecast with confidence intervals."""
+
+    predictions: list[float]
+    lower_bound: list[float]
+    upper_bound: list[float]
+    confidence_level: float
+
+
+@dataclass
+class CrossValResult:
+    """Result of time series cross-validation."""
+
+    scores: list[float]
+    mean_score: float
+    std_score: float
+    method: str
+
+
 def _compute_mae(actual: list[float], predicted: list[float]) -> float:
     """Compute mean absolute error."""
     if not actual:
@@ -232,4 +262,230 @@ class Forecaster:
             results=results,
             best_method=best_method,
             best_mae=best_mae,
+        )
+
+    def seasonal_decompose(self, data: list[float], period: int) -> DecompositionResult:
+        """Decompose time series into trend, seasonal, and residual components.
+
+        Uses moving average for trend extraction, then extracts seasonal pattern
+        by averaging values at each position in the period.
+        """
+        if not data or len(data) < period:
+            # Return zeros for insufficient data
+            n = len(data) if data else 0
+            return DecompositionResult(
+                trend=[0.0] * n,
+                seasonal=[0.0] * n,
+                residual=[0.0] * n,
+                period=period,
+            )
+
+        n = len(data)
+        trend: list[float] = []
+
+        # Centered moving average for trend
+        half_window = period // 2
+        for i in range(n):
+            if i < half_window or i >= n - half_window:
+                # Use available data at edges
+                start = max(0, i - half_window)
+                end = min(n, i + half_window + 1)
+                avg = sum(data[start:end]) / len(data[start:end])
+                trend.append(avg)
+            else:
+                avg = sum(data[i - half_window : i + half_window + 1]) / period
+                trend.append(avg)
+
+        # Detrended series
+        detrended = [data[i] - trend[i] for i in range(n)]
+
+        # Extract seasonal pattern by averaging positions within period
+        seasonal_avg: dict[int, list[float]] = {i: [] for i in range(period)}
+        for i, val in enumerate(detrended):
+            pos = i % period
+            seasonal_avg[pos].append(val)
+
+        # Average seasonal component per position
+        seasonal_pattern = [
+            sum(seasonal_avg[i]) / len(seasonal_avg[i]) if seasonal_avg[i] else 0.0 for i in range(period)
+        ]
+
+        # Expand seasonal pattern to full series length
+        seasonal = [seasonal_pattern[i % period] for i in range(n)]
+
+        # Residual = data - trend - seasonal
+        residual = [round(data[i] - trend[i] - seasonal[i], 6) for i in range(n)]
+        trend = [round(t, 6) for t in trend]
+        seasonal = [round(s, 6) for s in seasonal]
+
+        return DecompositionResult(
+            trend=trend,
+            seasonal=seasonal,
+            residual=residual,
+            period=period,
+        )
+
+    def forecast_with_confidence(
+        self,
+        data: list[float],
+        steps: int = 1,
+        confidence: float = 0.95,
+    ) -> ConfidenceForecast:
+        """Forecast with confidence intervals using ensemble method.
+
+        Confidence intervals are computed using residual standard deviation
+        multiplied by the appropriate z-score for the confidence level.
+        """
+        if not data:
+            return ConfidenceForecast(
+                predictions=[0.0] * steps,
+                lower_bound=[0.0] * steps,
+                upper_bound=[0.0] * steps,
+                confidence_level=confidence,
+            )
+
+        # Get ensemble forecast
+        ensemble_result = self.ensemble(data, horizon=steps)
+        predictions = ensemble_result.predictions
+
+        # Compute residual std from training predictions
+        # Use moving average one-step-ahead errors as proxy
+        window = min(3, len(data))
+        actual: list[float] = []
+        predicted: list[float] = []
+        for i in range(window, len(data)):
+            avg = sum(data[i - window : i]) / window
+            predicted.append(avg)
+            actual.append(data[i])
+
+        if not actual:
+            # Not enough data for residuals, use default std
+            residual_std = 1.0
+        else:
+            errors = [a - p for a, p in zip(actual, predicted)]
+            residual_std = math.sqrt(sum(e**2 for e in errors) / len(errors))
+
+        # Z-score for confidence level (approximate)
+        # 0.90 -> 1.645, 0.95 -> 1.96, 0.99 -> 2.576
+        if confidence >= 0.99:
+            z_score = 2.576
+        elif confidence >= 0.95:
+            z_score = 1.96
+        else:
+            z_score = 1.645
+
+        margin = z_score * residual_std
+
+        lower_bound = [round(p - margin, 6) for p in predictions]
+        upper_bound = [round(p + margin, 6) for p in predictions]
+
+        return ConfidenceForecast(
+            predictions=predictions,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+            confidence_level=confidence,
+        )
+
+    def multistep_forecast(
+        self,
+        data: list[float],
+        steps: int,
+        method: str = "ensemble",
+    ) -> list[float]:
+        """Multi-step ahead forecast using iterative prediction.
+
+        At each step, appends the prediction to the data and forecasts again.
+        Supports methods: moving_average, exponential_smoothing, linear_trend, ensemble.
+        """
+        if not data or steps <= 0:
+            return []
+
+        method_map = {
+            "moving_average": self.moving_average,
+            "exponential_smoothing": self.exponential_smoothing,
+            "linear_trend": self.linear_trend,
+            "ensemble": self.ensemble,
+        }
+
+        if method not in method_map:
+            raise ValueError(f"Unknown method '{method}'. Choose from: {list(method_map.keys())}")
+
+        forecast_fn = method_map[method]
+        extended = list(data)
+        predictions: list[float] = []
+
+        for _ in range(steps):
+            result = forecast_fn(extended, horizon=1)
+            next_val = result.predictions[0]
+            predictions.append(next_val)
+            extended.append(next_val)
+
+        return predictions
+
+    def cross_validate(self, data: list[float], n_splits: int = 3) -> CrossValResult:
+        """Time series cross-validation using expanding window.
+
+        Trains on first k splits, tests on k+1 split. Reports MAE scores.
+        Uses ensemble method for forecasting.
+        """
+        if not data or n_splits < 2:
+            return CrossValResult(
+                scores=[],
+                mean_score=0.0,
+                std_score=0.0,
+                method="cross_validate",
+            )
+
+        n = len(data)
+        split_size = n // (n_splits + 1)
+
+        if split_size < 3:
+            # Not enough data
+            return CrossValResult(
+                scores=[],
+                mean_score=0.0,
+                std_score=0.0,
+                method="cross_validate",
+            )
+
+        scores: list[float] = []
+        for i in range(1, n_splits + 1):
+            train_end = split_size * i
+            test_start = train_end
+            test_end = min(test_start + split_size, n)
+
+            if test_start >= n:
+                break
+
+            train = data[:train_end]
+            test = data[test_start:test_end]
+
+            if not test:
+                break
+
+            # Forecast test length
+            forecast_result = self.ensemble(train, horizon=len(test))
+            mae = _compute_mae(test, forecast_result.predictions[: len(test)])
+            scores.append(mae)
+
+        if not scores:
+            return CrossValResult(
+                scores=[],
+                mean_score=0.0,
+                std_score=0.0,
+                method="cross_validate",
+            )
+
+        mean_score = sum(scores) / len(scores)
+        if len(scores) > 1:
+            variance = sum((s - mean_score) ** 2 for s in scores) / len(scores)
+            std_score = math.sqrt(variance)
+        else:
+            std_score = 0.0
+
+        return CrossValResult(
+            scores=[round(s, 6) for s in scores],
+            mean_score=round(mean_score, 6),
+            std_score=round(std_score, 6),
+            method="cross_validate",
         )
