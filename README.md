@@ -4,7 +4,7 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/ChunkyTortoise/insight-engine/ci.yml?label=CI)](https://github.com/ChunkyTortoise/insight-engine/actions)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-63_passing-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-76_passing-brightgreen)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F1C40F.svg)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit_Cloud-FF4B4B.svg?logo=streamlit&logoColor=white)](https://ct-insight-engine.streamlit.app)
 
@@ -30,7 +30,8 @@ CSV/Excel Upload
        │
        ├───> Cleaner (dedup, standardize, impute)
        ├───> Predictor (auto-ML, SHAP)
-       └───> Attribution (4 models)
+       ├───> Attribution (4 models)
+       └───> Anomaly Detector (Z-score + IQR)
 ```
 
 ## Quick Start
@@ -54,6 +55,7 @@ Or try the **[live demo on Streamlit Cloud](https://ct-insight-engine.streamlit.
 4. **Predictive Modeling** -- Auto-detects classification/regression, trains gradient boosting, SHAP explanations
 5. **Marketing Attribution** -- First-touch, last-touch, linear, time-decay across any channel data
 6. **Report Generator** -- Markdown reports with findings, metrics, and chart placeholders
+7. **Anomaly Detector** -- Z-score and IQR outlier detection with per-column summaries (stdlib only, no numpy required)
 
 ## Demo Datasets
 
@@ -84,7 +86,8 @@ insight-engine/
 │   ├── attribution.py              # 4 marketing attribution models
 │   ├── predictor.py                # Auto-ML + SHAP explanations
 │   ├── cleaner.py                  # Dedup, standardize, impute
-│   └── report_generator.py         # Markdown/PDF report generation
+│   ├── report_generator.py         # Markdown/PDF report generation
+│   └── anomaly_detector.py         # Z-score + IQR outlier detection
 ├── demo_data/
 │   ├── generate_demo_data.py       # Reproducible sample data generator
 │   ├── ecommerce.csv               # 1,000 transactions
@@ -94,6 +97,30 @@ insight-engine/
 ├── .github/workflows/ci.yml        # CI pipeline
 ├── Makefile                        # demo, test, lint, setup
 └── requirements.txt
+```
+
+## Anomaly Detection
+
+Detect outliers in numeric data using Z-score and IQR methods -- no numpy or pandas required:
+
+```python
+from insight_engine.anomaly_detector import AnomalyDetector
+
+detector = AnomalyDetector(z_threshold=3.0, iqr_multiplier=1.5)
+
+# Single column
+data = [10, 11, 10, 12, 10, 11, 10, 200]
+anomalies = detector.detect_zscore(data, column="revenue")
+for a in anomalies:
+    print(f"Row {a.row_index}: {a.value} ({a.direction}, z={a.score})")
+
+# Multiple columns at once (runs both methods, deduplicates)
+results = detector.detect_all({
+    "revenue": [10, 11, 10, 12, 10, 11, 10, 200],
+    "cost": [5, 5, 5, 5, 5, 5, 5, 5],
+})
+print(detector.summary(results))
+# {'total_anomalies': 1, 'columns_affected': 1, 'per_column': {'revenue': 1}, ...}
 ```
 
 ## Testing
