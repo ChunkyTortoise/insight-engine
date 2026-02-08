@@ -6,6 +6,9 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Tests](https://img.shields.io/badge/tests-63_passing-brightgreen)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F1C40F.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit_Cloud-FF4B4B.svg?logo=streamlit&logoColor=white)](https://ct-insight-engine.streamlit.app)
+
+**[Live Demo](https://ct-insight-engine.streamlit.app)** -- try it without installing anything.
 
 ## What This Solves
 
@@ -40,6 +43,8 @@ pip install -r requirements.txt
 # Demo mode -- 3 sample datasets, no config needed
 make demo
 ```
+
+Or try the **[live demo on Streamlit Cloud](https://ct-insight-engine.streamlit.app)** -- no install required.
 
 ### What You Get
 
