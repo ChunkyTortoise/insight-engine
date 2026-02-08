@@ -93,7 +93,7 @@ def main():
                     for c in profile.columns
                 ]
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
     # Dashboard tab
@@ -102,7 +102,7 @@ def main():
         profile = profile_dataframe(df)
         charts = generate_dashboard(df, profile)
         for chart in charts:
-            st.plotly_chart(chart.fig, use_container_width=True)
+            st.plotly_chart(chart.fig, width="stretch")
 
     # Clean tab
     with tab_clean:
@@ -124,7 +124,7 @@ def main():
             st.success(f"Cleaning complete: {report.original_rows} → {report.cleaned_rows} rows")
             for op in report.operations:
                 st.write(f"- {op}")
-            st.dataframe(cleaned.head(50), use_container_width=True)
+            st.dataframe(cleaned.head(50), width="stretch")
 
     # Predict tab
     with tab_predict:
@@ -153,7 +153,7 @@ def main():
                 results = run_all_models(df, conversions)
                 for model, result in results.items():
                     st.write(f"**{model.value}** ({result.total_conversions} conversions)")
-                    st.dataframe(result.summary, use_container_width=True)
+                    st.dataframe(result.summary, width="stretch")
         else:
             st.info(f"Attribution requires columns: {required_cols}. Try the Marketing Touchpoints demo dataset.")
 
