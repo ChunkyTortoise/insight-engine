@@ -368,3 +368,230 @@ class TestCrossValidation:
         result = f.cross_validate(data, n_splits=5)
         # Should produce multiple scores
         assert len(result.scores) >= 3
+
+
+# ============================================================
+# NEW TESTS: Trend detection, horizons, missing data, edge cases
+# ============================================================
+
+
+class TestTrendDetection:
+    """Tests for detecting upward, downward, flat, and seasonal trends."""
+
+    def test_upward_trend_detected(self):
+        f = Forecaster()
+        data = [float(i * 5) for i in range(20)]
+        result = f.linear_trend(data, horizon=3)
+        # Predictions should continue increasing
+        assert result.predictions[0] > data[-1]
+        assert result.predictions[2] > result.predictions[0]
+
+    def test_downward_trend_detected(self):
+        f = Forecaster()
+        data = [100.0 - float(i * 3) for i in range(20)]
+        result = f.linear_trend(data, horizon=3)
+        # Predictions should continue decreasing
+        assert result.predictions[0] < data[-1]
+
+    def test_flat_trend_detected(self):
+        f = Forecaster()
+        data = [50.0] * 20
+        result = f.linear_trend(data, horizon=5)
+        # All predictions should be ~50
+        for p in result.predictions:
+            assert abs(p - 50.0) < 1e-3
+
+    def test_seasonal_data_decomposition(self):
+        f = Forecaster()
+        # Repeating seasonal pattern: 10, 20, 30, 10, 20, 30, ...
+        pattern = [10.0, 20.0, 30.0]
+        data = pattern * 8
+        result = f.seasonal_decompose(data, period=3)
+        # Seasonal component should repeat
+        assert result.seasonal[0] == result.seasonal[3]
+        assert result.seasonal[1] == result.seasonal[4]
+
+
+class TestForecastHorizon:
+    """Tests for different forecast horizons."""
+
+    def test_single_step_forecast(self):
+        f = Forecaster()
+        data = [10.0, 20.0, 30.0, 40.0, 50.0]
+        result = f.moving_average(data, window=3, horizon=1)
+        assert len(result.predictions) == 1
+
+    def test_multi_step_forecast(self):
+        f = Forecaster()
+        data = [1.0, 2.0, 3.0, 4.0, 5.0]
+        result = f.moving_average(data, window=3, horizon=10)
+        assert len(result.predictions) == 10
+
+    def test_large_horizon(self):
+        f = Forecaster()
+        data = [float(i) for i in range(10)]
+        result = f.ensemble(data, horizon=50)
+        assert len(result.predictions) == 50
+
+    def test_horizon_consistency_across_methods(self):
+        f = Forecaster()
+        data = [10.0, 15.0, 20.0, 25.0, 30.0]
+        horizon = 7
+        comp = f.compare_forecasts(data, horizon=horizon)
+        for name, result in comp.results.items():
+            assert len(result.predictions) == horizon
+
+
+class TestMissingDataHandling:
+    """Tests for edge cases with missing/unusual data."""
+
+    def test_empty_data_moving_average(self):
+        f = Forecaster()
+        result = f.moving_average([], window=3, horizon=5)
+        assert result.predictions == [0.0] * 5
+        assert result.mae == 0.0
+
+    def test_empty_data_exponential_smoothing(self):
+        f = Forecaster()
+        result = f.exponential_smoothing([], horizon=3)
+        assert result.predictions == [0.0] * 3
+
+    def test_empty_data_linear_trend(self):
+        f = Forecaster()
+        result = f.linear_trend([], horizon=4)
+        assert result.predictions == [0.0] * 4
+
+    def test_short_series_two_points(self):
+        f = Forecaster()
+        data = [10.0, 20.0]
+        result = f.ensemble(data, horizon=3)
+        assert len(result.predictions) == 3
+        # Should not crash, values should be reasonable
+        assert all(isinstance(p, float) for p in result.predictions)
+
+    def test_single_point_all_methods(self):
+        f = Forecaster()
+        data = [42.0]
+        comp = f.compare_forecasts(data, horizon=3)
+        for result in comp.results.values():
+            assert len(result.predictions) == 3
+
+
+class TestConfidenceIntervalProperties:
+    """Tests for confidence interval width, symmetry, and coverage."""
+
+    def test_interval_width_positive(self):
+        f = Forecaster()
+        data = [1.0, 3.0, 2.0, 5.0, 4.0, 7.0, 6.0, 9.0]
+        result = f.forecast_with_confidence(data, steps=3, confidence=0.95)
+        for i in range(3):
+            width = result.upper_bound[i] - result.lower_bound[i]
+            assert width > 0
+
+    def test_interval_symmetry(self):
+        f = Forecaster()
+        data = [10.0, 20.0, 15.0, 25.0, 20.0, 30.0]
+        result = f.forecast_with_confidence(data, steps=3, confidence=0.95)
+        for i in range(3):
+            upper_dist = result.upper_bound[i] - result.predictions[i]
+            lower_dist = result.predictions[i] - result.lower_bound[i]
+            assert abs(upper_dist - lower_dist) < 1e-3
+
+    def test_90_confidence_narrower_than_99(self):
+        f = Forecaster()
+        data = [5.0, 10.0, 8.0, 15.0, 12.0, 20.0, 18.0]
+        r90 = f.forecast_with_confidence(data, steps=5, confidence=0.90)
+        r99 = f.forecast_with_confidence(data, steps=5, confidence=0.99)
+        for i in range(5):
+            w90 = r90.upper_bound[i] - r90.lower_bound[i]
+            w99 = r99.upper_bound[i] - r99.lower_bound[i]
+            assert w99 > w90
+
+    def test_short_data_uses_default_std(self):
+        f = Forecaster()
+        data = [10.0, 20.0]
+        result = f.forecast_with_confidence(data, steps=2, confidence=0.95)
+        # Should not crash; intervals should still be ordered
+        for i in range(2):
+            assert result.lower_bound[i] <= result.predictions[i]
+            assert result.predictions[i] <= result.upper_bound[i]
+
+
+class TestDecompositionComponents:
+    """Tests for trend, seasonal, and residual decomposition."""
+
+    def test_reconstruction_equals_original(self):
+        f = Forecaster()
+        data = [float(i + (i % 4) * 2) for i in range(40)]
+        result = f.seasonal_decompose(data, period=4)
+        for i in range(len(data)):
+            reconstructed = result.trend[i] + result.seasonal[i] + result.residual[i]
+            assert abs(reconstructed - data[i]) < 1e-3
+
+    def test_seasonal_component_repeats(self):
+        f = Forecaster()
+        pattern = [5.0, 15.0, 10.0, 20.0]
+        data = pattern * 10
+        result = f.seasonal_decompose(data, period=4)
+        # Seasonal values at same phase should be equal
+        for i in range(4):
+            vals = [result.seasonal[j] for j in range(i, len(data), 4)]
+            assert all(abs(v - vals[0]) < 1e-3 for v in vals)
+
+    def test_trend_component_length(self):
+        f = Forecaster()
+        data = list(range(30))
+        result = f.seasonal_decompose(data, period=5)
+        assert len(result.trend) == 30
+        assert len(result.seasonal) == 30
+        assert len(result.residual) == 30
+
+
+class TestEdgeCasesForecaster:
+    """Edge cases: constant series, single point, negative values."""
+
+    def test_constant_series_zero_mae(self):
+        f = Forecaster()
+        data = [7.0] * 20
+        result = f.moving_average(data, window=5, horizon=3)
+        assert result.mae == 0.0
+        assert result.rmse == 0.0
+
+    def test_negative_values(self):
+        f = Forecaster()
+        data = [-10.0, -20.0, -30.0, -40.0, -50.0]
+        result = f.linear_trend(data, horizon=3)
+        assert result.predictions[0] < -50.0
+
+    def test_mixed_sign_values(self):
+        f = Forecaster()
+        data = [-5.0, 10.0, -3.0, 15.0, -1.0, 20.0]
+        result = f.ensemble(data, horizon=3)
+        assert len(result.predictions) == 3
+
+    def test_very_large_values(self):
+        f = Forecaster()
+        data = [1e12, 2e12, 3e12, 4e12, 5e12]
+        result = f.linear_trend(data, horizon=2)
+        assert result.predictions[0] > 5e12
+
+    def test_compare_picks_lowest_mae(self):
+        f = Forecaster()
+        data = [float(i * 10) for i in range(20)]
+        comp = f.compare_forecasts(data, horizon=5)
+        best_mae = comp.best_mae
+        for r in comp.results.values():
+            assert best_mae <= r.mae + 1e-6
+
+    def test_multistep_with_negative_steps_returns_empty(self):
+        f = Forecaster()
+        data = [1.0, 2.0, 3.0]
+        result = f.multistep_forecast(data, steps=-1)
+        assert result == []
+
+    def test_cross_validate_single_split_returns_empty(self):
+        f = Forecaster()
+        data = [float(i) for i in range(20)]
+        result = f.cross_validate(data, n_splits=1)
+        assert result.scores == []
+        assert result.mean_score == 0.0
