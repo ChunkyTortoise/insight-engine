@@ -411,3 +411,221 @@ class TestElbowMethod:
         data = np.random.rand(70, 4)
         result = c.elbow_method(data, k_range=range(2, 12))
         assert len(result.k_values) == len(result.inertias)
+
+
+# ============================================================
+# NEW TESTS: K-means variations, DBSCAN tuning, silhouette,
+# elbow method, cluster assignment, edge cases
+# ============================================================
+
+
+class TestKMeansVariations:
+    """Tests for K-means with different k values and reproducibility."""
+
+    def test_kmeans_k2(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.kmeans(data, k=2)
+        assert result.n_clusters == 2
+        assert len(set(result.labels)) == 2
+
+    def test_kmeans_k5(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.kmeans(data, k=5)
+        assert result.n_clusters == 5
+        assert sum(result.cluster_sizes.values()) == len(data)
+
+    def test_kmeans_reproducibility(self):
+        data = _make_blobs()
+        c = Clusterer()
+        r1 = c.kmeans(data, k=3, random_state=42)
+        r2 = c.kmeans(data, k=3, random_state=42)
+        assert r1.labels == r2.labels
+        assert r1.inertia == r2.inertia
+
+    def test_kmeans_different_seeds_may_differ(self):
+        # With well-separated blobs, different seeds should still find similar structure
+        data = _make_blobs()
+        c = Clusterer()
+        r1 = c.kmeans(data, k=3, random_state=0)
+        r2 = c.kmeans(data, k=3, random_state=99)
+        # Both should have 3 clusters with all points assigned
+        assert sum(r1.cluster_sizes.values()) == 30
+        assert sum(r2.cluster_sizes.values()) == 30
+
+    def test_kmeans_convergence_low_inertia_for_blobs(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.kmeans(data, k=3)
+        # Well-separated blobs should yield high silhouette
+        assert result.silhouette > 0.3
+
+    def test_auto_kmeans_range_limit(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.auto_kmeans(data, k_range=range(2, 5))
+        assert 2 <= result.n_clusters <= 4
+
+
+class TestDBSCANTuning:
+    """Tests for DBSCAN parameter tuning and noise detection."""
+
+    def test_large_eps_single_cluster(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.dbscan(data, eps=100.0, min_samples=2)
+        # Very large eps should merge everything into one cluster
+        assert result.n_clusters <= 2
+
+    def test_small_min_samples(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.dbscan(data, eps=1.5, min_samples=2)
+        assert result.n_clusters >= 1
+
+    def test_high_min_samples_more_noise(self):
+        data = _make_blobs()
+        c = Clusterer()
+        r_low = c.dbscan(data, eps=1.0, min_samples=2)
+        r_high = c.dbscan(data, eps=1.0, min_samples=9)
+        noise_low = r_low.cluster_sizes.get(-1, 0)
+        noise_high = r_high.cluster_sizes.get(-1, 0)
+        # Higher min_samples should produce at least as much noise
+        assert noise_high >= noise_low
+
+    def test_dbscan_no_inertia(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.dbscan(data, eps=1.5, min_samples=3)
+        assert result.inertia is None
+
+    def test_dbscan_labels_count_matches_data(self):
+        data = _make_blobs()
+        c = Clusterer()
+        result = c.dbscan(data, eps=1.0, min_samples=3)
+        assert len(result.labels) == len(data)
+
+
+class TestSilhouetteScore:
+    """Tests for silhouette score behavior."""
+
+    def test_perfect_clusters_high_silhouette(self):
+        # Well-separated clusters
+        c = Clusterer()
+        cluster_a = np.zeros((15, 2))
+        cluster_b = np.ones((15, 2)) * 100
+        data = np.vstack([cluster_a, cluster_b]).astype(float)
+        result = c.kmeans(data, k=2)
+        assert result.silhouette > 0.5
+
+    def test_single_cluster_silhouette_negative(self):
+        c = Clusterer()
+        data = np.random.rand(20, 2)
+        labels = [0] * 20
+        eval_result = c.evaluate_clusters(data, labels)
+        assert eval_result.silhouette == -1.0
+
+    def test_silhouette_bounded(self):
+        c = Clusterer()
+        data = np.random.rand(50, 3)
+        result = c.kmeans(data, k=4)
+        assert -1.0 <= result.silhouette <= 1.0
+
+
+class TestElbowMethodAdvanced:
+    """Tests for elbow method behavior and edge cases."""
+
+    def test_elbow_with_clear_structure(self):
+        c = Clusterer()
+        # 3 well-separated blobs should suggest k near 3
+        data = _make_blobs()
+        result = c.elbow_method(data, k_range=range(2, 8))
+        assert result.suggested_k >= 2
+        assert result.suggested_k <= 7
+
+    def test_elbow_inertia_monotonically_decreases(self):
+        c = Clusterer()
+        data = np.random.rand(60, 3)
+        result = c.elbow_method(data, k_range=range(2, 10))
+        for i in range(len(result.inertias) - 1):
+            assert result.inertias[i] >= result.inertias[i + 1]
+
+    def test_elbow_k_capped_by_data_size(self):
+        c = Clusterer()
+        data = np.random.rand(5, 2)
+        result = c.elbow_method(data, k_range=range(2, 20))
+        # k can't exceed data size
+        assert max(result.k_values) < 5
+
+
+class TestClusterAssignment:
+    """Tests for cluster label assignment behavior."""
+
+    def test_all_points_assigned_kmeans(self):
+        c = Clusterer()
+        data = np.random.rand(40, 3)
+        result = c.kmeans(data, k=4)
+        assert len(result.labels) == 40
+        # All labels should be valid cluster IDs
+        assert all(0 <= lbl < 4 for lbl in result.labels)
+
+    def test_hierarchical_all_points_assigned(self):
+        c = Clusterer()
+        data = np.random.rand(30, 2)
+        result = c.hierarchical(data, n_clusters=3)
+        assert len(result.labels) == 30
+        assert set(result.labels) == {0, 1, 2}
+
+    def test_dbscan_boundary_point_handling(self):
+        c = Clusterer()
+        # Create tight cluster with one borderline point
+        core = np.zeros((10, 2))
+        boundary = np.array([[2.0, 0.0]])
+        data = np.vstack([core, boundary]).astype(float)
+        result = c.dbscan(data, eps=3.0, min_samples=3)
+        assert len(result.labels) == 11
+
+
+class TestEdgeCasesClustering:
+    """Edge cases: identical data, single point, high dimensionality."""
+
+    def test_all_identical_points(self):
+        c = Clusterer()
+        data = np.ones((20, 3))
+        result = c.kmeans(data, k=2)
+        assert len(result.labels) == 20
+        # Silhouette should be poor
+        assert result.silhouette <= 0.0
+
+    def test_single_point_cluster(self):
+        # Minimal valid dataset for k=2: need at least 2 points
+        c = Clusterer()
+        data = np.array([[0.0, 0.0], [100.0, 100.0]])
+        result = c.kmeans(data, k=2)
+        assert len(result.labels) == 2
+
+    def test_high_dimensional_data(self):
+        c = Clusterer()
+        data = np.random.rand(30, 50)
+        result = c.kmeans(data, k=3)
+        assert result.n_clusters == 3
+        assert len(result.labels) == 30
+
+    def test_compare_selects_best_silhouette(self):
+        c = Clusterer()
+        data = _make_blobs()
+        comp = c.compare(data)
+        best = comp.best_silhouette
+        for r in comp.results.values():
+            assert best >= r.silhouette
+
+    def test_profile_with_custom_feature_names(self):
+        c = Clusterer()
+        data = np.random.rand(30, 2)
+        result = c.kmeans(data, k=2)
+        profile = c.profile_clusters(data, result.labels, feature_names=["width", "height"])
+        for cluster_id, stats in profile.items():
+            assert "width" in stats
+            assert "height" in stats
+            assert stats["width"]["size"] > 0
