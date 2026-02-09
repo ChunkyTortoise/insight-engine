@@ -206,6 +206,14 @@ insight-engine/
 └── requirements.txt
 ```
 
+## Architecture Decisions
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| [ADR-0001](docs/adr/0001-auto-type-detection.md) | Automatic Type Detection | Accepted |
+| [ADR-0002](docs/adr/0002-four-attribution-models.md) | Four Attribution Models | Accepted |
+| [ADR-0003](docs/adr/0003-shap-explainability.md) | SHAP Explainability | Accepted |
+
 ## Testing
 
 ```bash
@@ -215,6 +223,8 @@ python -m pytest tests/test_profiler.py  # Single module
 ```
 
 ## Benchmarks
+
+See [BENCHMARKS.md](BENCHMARKS.md) for detailed performance data.
 
 ```bash
 python benchmarks/run_benchmarks.py
@@ -234,6 +244,10 @@ python benchmarks/run_benchmarks.py
 ## Deploy
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/chunkytortoise/insight-engine/main/app.py)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## License
 
