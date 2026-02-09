@@ -14,3 +14,25 @@ venv/
 output/
 *.png
 !demo_data/
+
+# Added by deep clean
+*.py[cod]
+*$py.class
+*.so
+*.egg
+env/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.hypothesis/
+.coverage
+htmlcov/
+coverage.xml
+.mypy_cache/
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+*.log
