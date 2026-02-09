@@ -10,6 +10,7 @@ from insight_engine.clustering import (
     ClusterResult,
     ElbowResult,
 )
+from insight_engine.dimensionality import DimensionalityReducer, ReductionResult, ScreePlotData
 from insight_engine.feature_lab import FeatureLab, FeatureResult, SelectionResult
 from insight_engine.forecaster import (
     ConfidenceForecast,
@@ -20,7 +21,9 @@ from insight_engine.forecaster import (
     ForecastResult,
 )
 from insight_engine.hypertuner import HyperTuner, TuningResult
+from insight_engine.kpi_framework import KPIDashboard, KPIDefinition, KPIEngine, KPIResult
 from insight_engine.model_observatory import ModelObservatory, ModelResult, ObservatoryReport
+from insight_engine.statistical_tests import StatisticalTester, TestResult, TestSuiteReport
 
 __all__ = [
     "Anomaly",
@@ -30,6 +33,7 @@ __all__ = [
     "ClusterResult",
     "Clusterer",
     "ConfidenceForecast",
+    "DimensionalityReducer",
     "CrossValResult",
     "DecompositionResult",
     "ElbowResult",
@@ -39,9 +43,18 @@ __all__ = [
     "ForecastResult",
     "Forecaster",
     "HyperTuner",
+    "KPIDashboard",
+    "KPIDefinition",
+    "KPIEngine",
+    "KPIResult",
     "ModelObservatory",
     "ModelResult",
     "ObservatoryReport",
+    "ReductionResult",
+    "ScreePlotData",
     "SelectionResult",
+    "StatisticalTester",
+    "TestResult",
+    "TestSuiteReport",
     "TuningResult",
 ]
