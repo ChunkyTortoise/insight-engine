@@ -6,7 +6,7 @@
 
 ![CI](https://github.com/ChunkyTortoise/insight-engine/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
-![Tests](https://img.shields.io/badge/tests-521%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-520%2B%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit_Cloud-FF4B4B.svg?logo=streamlit&logoColor=white)](https://ct-insight-engine.streamlit.app)
 
@@ -29,7 +29,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Test Suite | 521+ automated tests |
+| Test Suite | 520+ automated tests |
 | Auto-Profile Speed | <2s for 100K row CSV |
 | Supported Models | 8+ ML algorithms |
 | Statistical Tests | 6 hypothesis tests |
@@ -166,7 +166,7 @@ docker compose up
 | UI | Streamlit, Plotly |
 | Data | Pandas, NumPy, openpyxl |
 | ML | scikit-learn, XGBoost, SHAP |
-| Testing | pytest (521+ tests) |
+| Testing | pytest (520+ tests) |
 | CI | GitHub Actions (Python 3.11, 3.12) |
 | Linting | Ruff |
 | Container | Docker, Docker Compose |
@@ -198,7 +198,7 @@ insight-engine/
 ├── benchmarks/                     # Performance benchmarks
 ├── demo_data/                      # 3 sample datasets
 ├── docs/adr/                       # Architecture Decision Records
-├── tests/                          # 19 test files, 521+ tests
+├── tests/                          # 19 test files, 520+ tests
 ├── .github/workflows/ci.yml        # CI pipeline
 ├── Dockerfile                      # Container image
 ├── docker-compose.yml              # Container orchestration
@@ -217,7 +217,7 @@ insight-engine/
 ## Testing
 
 ```bash
-make test                           # Full suite (521+ tests)
+make test                           # Full suite (520+ tests)
 python -m pytest tests/ -v          # Verbose output
 python -m pytest tests/test_profiler.py  # Single module
 ```
