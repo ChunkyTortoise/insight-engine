@@ -1,0 +1,10 @@
+services:
+  insight-engine:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./demo_data:/app/demo_data
+    restart: unless-stopped
+    environment:
+      - STREAMLIT_SERVER_MAX_UPLOAD_SIZE=200
